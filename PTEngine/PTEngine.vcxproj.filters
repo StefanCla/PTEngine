@@ -1,23 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
+    <Filter Include="src">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
+    <Filter Include="src\graphics">
+      <UniqueIdentifier>{a23f37bf-c000-4088-be45-db52318bf1b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="include\graphics">
+      <UniqueIdentifier>{b2ae92f1-09b6-443c-86b2-37951e67e9dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern">
+      <UniqueIdentifier>{f1f60f89-a16b-44ea-83d2-f979e099b0d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\src">
+      <UniqueIdentifier>{4d9fa1ef-ef76-4936-8f8c-4bc4fa553486}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Sources\main.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\renderer.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\src\glad.c">
+      <Filter>extern\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Headers\Header.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="includes\Header.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\graphics\renderer.h">
+      <Filter>include\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

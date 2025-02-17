@@ -1,12 +1,10 @@
 #include "graphics/renderer.h"
 #include <stdio.h>
 
-Renderer2::Renderer2()
-{
+Renderer::Renderer()
+{}
 
-}
-
-Renderer2::~Renderer2()
+Renderer::~Renderer()
 {
 	glDeleteVertexArrays(1, &m_VAO);
 	glDeleteBuffers(1, &m_VBO);
@@ -16,7 +14,7 @@ Renderer2::~Renderer2()
 	SDL_GL_DestroyContext(m_GLContext);
 }
 
-bool Renderer2::SetupWindow(int32_t Width, int32_t Height)
+bool Renderer::SetupWindow(int32_t Width, int32_t Height)
 {
 	if (!SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO))
 	{
@@ -66,19 +64,19 @@ bool Renderer2::SetupWindow(int32_t Width, int32_t Height)
 	return true;
 }
 
-void Renderer2::SwapWindow()
+void Renderer::SwapWindow()
 {
 	/*glClear*/
 
 	SDL_GL_SwapWindow(m_Window);
 }
 
-void Renderer2::ResizeWindow(int32_t Width, int32_t Height)
+void Renderer::ResizeWindow(int32_t Width, int32_t Height)
 {
 	glViewport(0, 0, Width, Height);
 }
 
-void Renderer2::SetupVBO()
+void Renderer::SetupVBO()
 {
 	glGenBuffers(1, &m_VBO);
 
@@ -88,20 +86,20 @@ void Renderer2::SetupVBO()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(m_Vertices), m_Vertices, GL_STATIC_DRAW);
 }
 
-void Renderer2::SetupVAO()
+void Renderer::SetupVAO()
 {
 	glGenVertexArrays(1, &m_VAO);
 	BindVAO();
 }
 
-void Renderer2::SetupEBO()
+void Renderer::SetupEBO()
 {
 	glGenBuffers(1, &m_EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_Indices), m_Indices, GL_STATIC_DRAW);
 }
 
-void Renderer2::SetupVertexShader()
+void Renderer::SetupVertexShader()
 {
 	m_VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 
@@ -124,7 +122,7 @@ void Renderer2::SetupVertexShader()
 	//https://learnopengl.com/Getting-started/Hello-Triangle
 }
 
-void Renderer2::SetupFragmentShader()
+void Renderer::SetupFragmentShader()
 {
 	m_FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(m_FragmentShaderID, 1, &m_FragmentShader, NULL);
@@ -141,7 +139,7 @@ void Renderer2::SetupFragmentShader()
 	}
 }
 
-void Renderer2::SetupShaderProgram()
+void Renderer::SetupShaderProgram()
 {
 	m_ShaderProgramID = glCreateProgram();
 
@@ -162,17 +160,17 @@ void Renderer2::SetupShaderProgram()
 	glDeleteShader(m_FragmentShaderID);
 }
 
-void Renderer2::BindVAO()
+void Renderer::BindVAO()
 {
 	glBindVertexArray(m_VAO);
 }
 
-void Renderer2::UnbindVAO()
+void Renderer::UnbindVAO()
 {
 	glBindVertexArray(0);
 }
 
-void Renderer2::SetupVertexAttrib()
+void Renderer::SetupVertexAttrib()
 {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);

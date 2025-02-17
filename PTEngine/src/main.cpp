@@ -7,19 +7,9 @@
 
 #include "graphics/renderer.h"
 
-static SDL_Window* Window = nullptr;
-static SDL_Renderer* Renderer = nullptr;
-
 int main()
 {
-	SLNet::RakPeerInterface* Interface = SLNet::RakPeerInterface::GetInstance();
-	
-	if (Interface)
-	{
-		printf("SLikeNet seems to be working\n");
-	}
-
-	Renderer2* Render = new(Renderer2);
+	Renderer* Render = new(Renderer);
 
 	if (Render)
 	{
@@ -68,6 +58,7 @@ int main()
 	}
 
 	delete Render;
+	Render = nullptr;
 
 	return 0;
 }

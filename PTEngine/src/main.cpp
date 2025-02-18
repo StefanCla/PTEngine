@@ -25,6 +25,8 @@ int main()
 			Render->SetupVertexAttrib();
 			Render->UnbindVAO();
 
+			Render->ReadShaderFile("../resources/shaders/vertex/VertexShader.glsl");
+
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 			bool bIsRunning = true;

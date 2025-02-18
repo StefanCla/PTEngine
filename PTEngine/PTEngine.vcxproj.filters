@@ -21,6 +21,15 @@
     <Filter Include="extern\src">
       <UniqueIdentifier>{4d9fa1ef-ef76-4936-8f8c-4bc4fa553486}</UniqueIdentifier>
     </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{bae1b6b4-e0c4-42e1-a4d5-c019fd1422d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\shaders">
+      <UniqueIdentifier>{f1181052-e94d-4f62-806f-0191df8cdca8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\shaders\vertex">
+      <UniqueIdentifier>{d588db20-0ab7-44a3-8908-7ce8bf3a8545}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -40,5 +49,10 @@
     <ClInclude Include="includes\graphics\renderer.h">
       <Filter>include\graphics</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\resources\shaders\vertex\VertexShader.glsl">
+      <Filter>resources\shaders\vertex</Filter>
+    </None>
   </ItemGroup>
 </Project>

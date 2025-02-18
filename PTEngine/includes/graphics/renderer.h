@@ -71,5 +71,5 @@ private:
 	uint32_t m_VAO;
 	uint32_t m_EBO;
 
-	char* m_ShaderSource = nullptr;
+	std::string m_ShaderSource;
 };

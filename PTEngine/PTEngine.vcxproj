@@ -104,6 +104,9 @@
     <ClInclude Include="includes\graphics\renderer.h" />
     <ClInclude Include="includes\Header.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\resources\shaders\vertex\VertexShader.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

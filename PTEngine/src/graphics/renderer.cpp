@@ -1,11 +1,17 @@
 #include "graphics/renderer.h"
 #include <stdio.h>
+#include <fstream>
 
 Renderer::Renderer()
 {}
 
 Renderer::~Renderer()
 {
+	if (!m_ShaderSource)
+	{
+		delete[] m_ShaderSource;
+	}
+
 	glDeleteVertexArrays(1, &m_VAO);
 	glDeleteBuffers(1, &m_VBO);
 	glDeleteBuffers(1, &m_EBO);
@@ -176,4 +182,26 @@ void Renderer::SetupVertexAttrib()
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_VERTEX_ARRAY, 0);
+}
+
+void Renderer::ReadShaderFile(const std::string& File)
+{
+	if (!m_ShaderSource)
+	{
+		delete[] m_ShaderSource;
+		m_ShaderSource = nullptr;
+	}
+
+	std::ifstream Ifstream(File.c_str(), std::ifstream::binary);
+
+	std::filebuf* FileBuffer = Ifstream.rdbuf();
+
+	std::size_t Size = FileBuffer->pubseekoff(0, Ifstream.end, Ifstream.in);
+	FileBuffer->pubseekpos(0, Ifstream.in);
+
+	m_ShaderSource = new char[Size];
+
+	FileBuffer->sgetn(m_ShaderSource, Size);
+
+	Ifstream.close();
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include <string>
 #include <glad/glad.h>
 #include <SDL3/SDL.h>
 #include <gl/GL.h>
@@ -28,6 +29,8 @@ public:
 	void SetupVertexShader();
 	void SetupFragmentShader();
 	void SetupShaderProgram();
+
+	void ReadShaderFile(const std::string& File);
 
 public:
 	uint32_t m_ShaderProgramID;
@@ -67,4 +70,6 @@ private:
 	uint32_t m_VBO;
 	uint32_t m_VAO;
 	uint32_t m_EBO;
+
+	char* m_ShaderSource = nullptr;
 };

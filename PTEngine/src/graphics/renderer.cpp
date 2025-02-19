@@ -102,66 +102,66 @@ void Renderer::SetupEBO()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_Indices), m_Indices, GL_STATIC_DRAW);
 }
 
-void Renderer::SetupVertexShader()
-{
-	m_VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+//void Renderer::SetupVertexShader()
+//{
+//	m_VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+//
+//	//Add shader source
+//	glShaderSource(m_VertexShaderID, 1, &m_VertexShader, NULL);
+//
+//	//Dynamically compile shader
+//	glCompileShader(m_VertexShaderID);
+//
+//	int32_t CompileSuccess;
+//	char Log[512];
+//	glGetShaderiv(m_VertexShaderID, GL_COMPILE_STATUS, &CompileSuccess);
+//
+//	if (!CompileSuccess)
+//	{
+//		glGetShaderInfoLog(m_VertexShaderID, 512, NULL, Log);
+//		printf(Log);
+//	}
+//
+//	//https://learnopengl.com/Getting-started/Hello-Triangle
+//}
+//
+//void Renderer::SetupFragmentShader()
+//{
+//	m_FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+//	glShaderSource(m_FragmentShaderID, 1, &m_FragmentShader, NULL);
+//	glCompileShader(m_FragmentShaderID);
+//
+//	int32_t CompileSuccess;
+//	char Log[512];
+//	glGetShaderiv(m_FragmentShaderID, GL_COMPILE_STATUS, &CompileSuccess);
+//
+//	if (!CompileSuccess)
+//	{
+//		glGetShaderInfoLog(m_FragmentShaderID, 512, NULL, Log);
+//		printf(Log);
+//	}
+//}
 
-	//Add shader source
-	glShaderSource(m_VertexShaderID, 1, &m_VertexShader, NULL);
-
-	//Dynamically compile shader
-	glCompileShader(m_VertexShaderID);
-
-	int32_t CompileSuccess;
-	char Log[512];
-	glGetShaderiv(m_VertexShaderID, GL_COMPILE_STATUS, &CompileSuccess);
-
-	if (!CompileSuccess)
-	{
-		glGetShaderInfoLog(m_VertexShaderID, 512, NULL, Log);
-		printf(Log);
-	}
-
-	//https://learnopengl.com/Getting-started/Hello-Triangle
-}
-
-void Renderer::SetupFragmentShader()
-{
-	m_FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(m_FragmentShaderID, 1, &m_FragmentShader, NULL);
-	glCompileShader(m_FragmentShaderID);
-
-	int32_t CompileSuccess;
-	char Log[512];
-	glGetShaderiv(m_FragmentShaderID, GL_COMPILE_STATUS, &CompileSuccess);
-
-	if (!CompileSuccess)
-	{
-		glGetShaderInfoLog(m_FragmentShaderID, 512, NULL, Log);
-		printf(Log);
-	}
-}
-
-void Renderer::SetupShaderProgram()
-{
-	m_ShaderProgramID = glCreateProgram();
-
-	glAttachShader(m_ShaderProgramID, m_VertexShaderID);
-	glAttachShader(m_ShaderProgramID, m_FragmentShaderID);
-	glLinkProgram(m_ShaderProgramID);
-
-	int32_t LinkSuccess;
-	char Log[512];
-	glGetProgramiv(m_ShaderProgramID, GL_LINK_STATUS, &LinkSuccess);
-	if (!LinkSuccess)
-	{
-		glGetProgramInfoLog(m_ShaderProgramID, 512, NULL, Log);
-		printf(Log);
-	}
-
-	glDeleteShader(m_VertexShaderID);
-	glDeleteShader(m_FragmentShaderID);
-}
+//void Renderer::SetupShaderProgram()
+//{
+//	m_ShaderProgramID = glCreateProgram();
+//
+//	glAttachShader(m_ShaderProgramID, m_VertexShaderID);
+//	glAttachShader(m_ShaderProgramID, m_FragmentShaderID);
+//	glLinkProgram(m_ShaderProgramID);
+//
+//	int32_t LinkSuccess;
+//	char Log[512];
+//	glGetProgramiv(m_ShaderProgramID, GL_LINK_STATUS, &LinkSuccess);
+//	if (!LinkSuccess)
+//	{
+//		glGetProgramInfoLog(m_ShaderProgramID, 512, NULL, Log);
+//		printf(Log);
+//	}
+//
+//	glDeleteShader(m_VertexShaderID);
+//	glDeleteShader(m_FragmentShaderID);
+//}
 
 void Renderer::BindVAO()
 {
@@ -175,24 +175,12 @@ void Renderer::UnbindVAO()
 
 void Renderer::SetupVertexAttrib()
 {
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
 	glBindBuffer(GL_VERTEX_ARRAY, 0);
-}
 
-void Renderer::ReadShaderFile(const std::string& File)
-{
-	std::ifstream ShaderFile;
-
-	ShaderFile.open(File);
-	std::stringstream ShaderStream;
-
-	ShaderStream << ShaderFile.rdbuf();
-
-	ShaderFile.close();
-
-	m_ShaderSource = ShaderStream.str();
-
-	std::cout << m_ShaderSource << std::endl;
 }

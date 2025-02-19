@@ -30,8 +30,6 @@ public:
 	void SetupFragmentShader();
 	void SetupShaderProgram();
 
-	void ReadShaderFile(const std::string& File);
-
 public:
 	uint32_t m_ShaderProgramID;
 
@@ -40,36 +38,28 @@ private:
 	SDL_Renderer* m_Renderer = nullptr;
 	SDL_GLContextState* m_GLContext = nullptr;
 
-	const float m_Vertices[12] = {
-		 0.5f,  0.5f, 0.0f,  // top right
-		 0.5f, -0.5f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f   // top left 
+	const float m_Vertices[18] = {
+		// positions         // colors
+		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
+		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
 	};
+
+	//const float m_Vertices[12] = {
+	//	 0.5f,  0.5f, 0.0f,  // top right
+	//	 0.5f, -0.5f, 0.0f,  // bottom right
+	//	-0.5f, -0.5f, 0.0f,  // bottom left
+	//	-0.5f,  0.5f, 0.0f   // top left 
+	//};
+
 	const uint32_t m_Indices[6] = { 
 		0, 1, 3,   // first triangle
 		1, 2, 3    // second triangle
 	};
-
-	const char* m_VertexShader = "#version 460 core\n"
-		"layout (location = 0) in vec3 aPos;\n"
-		"void main()\n"
-		"{\n"
-		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-		"}\0";
-
-	const char* m_FragmentShader = "#version 460 core\n"
-		"out vec4 FragColor; \n"
-		"void main()\n"
-		"{\n"
-			"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-		"}\0";
 	
 	uint32_t m_VertexShaderID;
 	uint32_t m_FragmentShaderID;
 	uint32_t m_VBO;
 	uint32_t m_VAO;
 	uint32_t m_EBO;
-
-	std::string m_ShaderSource;
 };

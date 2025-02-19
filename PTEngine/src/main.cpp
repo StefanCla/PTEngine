@@ -6,28 +6,30 @@
 #include "slikenet/Kbhit.h"
 
 #include "graphics/renderer.h"
+#include "graphics/shader.h"
 
 int main()
 {
 	Renderer* Render = new(Renderer);
+	Shader* Shade = new(Shader);
 
 	if (Render)
 	{
 		if (Render->SetupWindow(640, 480))
 		{
-			Render->SetupVertexShader();
-			Render->SetupFragmentShader();
-			Render->SetupShaderProgram();
+			Shade->LoadShader("VertexShader.glsl", EShaderType::Vertex);
+			Shade->LoadShader("FragmentShader.glsl", EShaderType::Fragment);
+			Shade->Use();
+			//uint32_t Color = glGetUniformLocation(Shade->GetShaderProgram(), "ourColor");
+			//glUniform4f(Color, 1.0, 0.0, 1.0, 0.0);
 
 			Render->SetupVAO();
 			Render->SetupVBO();
-			Render->SetupEBO();
+			//Render->SetupEBO();
 			Render->SetupVertexAttrib();
 			Render->UnbindVAO();
 
-			Render->ReadShaderFile("../resources/shaders/vertex/VertexShader.glsl");
-
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 			bool bIsRunning = true;
 			while (bIsRunning)
@@ -49,9 +51,10 @@ int main()
 				glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 				glClear(GL_COLOR_BUFFER_BIT);
 
-				glUseProgram(Render->m_ShaderProgramID);
+				Shade->Use();
 				Render->BindVAO();
-				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+				//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+				glDrawArrays(GL_TRIANGLES, 0, 3);
 				Render->UnbindVAO();
 
 				Render->SwapWindow();

@@ -98,13 +98,16 @@
   <ItemGroup>
     <ClCompile Include="..\extern\src\glad.c" />
     <ClCompile Include="src\graphics\renderer.cpp" />
+    <ClCompile Include="src\graphics\shader.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\graphics\renderer.h" />
+    <ClInclude Include="includes\graphics\shader.h" />
     <ClInclude Include="includes\Header.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\resources\shaders\fragment\FragmentShader.glsl" />
     <None Include="..\resources\shaders\vertex\VertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

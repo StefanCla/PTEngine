@@ -30,6 +30,9 @@
     <Filter Include="resources\shaders\vertex">
       <UniqueIdentifier>{d588db20-0ab7-44a3-8908-7ce8bf3a8545}</UniqueIdentifier>
     </Filter>
+    <Filter Include="resources\shaders\fragment">
+      <UniqueIdentifier>{5425b452-e3b2-4932-ba65-89696c31629d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -41,6 +44,9 @@
     <ClCompile Include="..\extern\src\glad.c">
       <Filter>extern\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\shader.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\Header.h">
@@ -49,10 +55,16 @@
     <ClInclude Include="includes\graphics\renderer.h">
       <Filter>include\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="includes\graphics\shader.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\resources\shaders\vertex\VertexShader.glsl">
       <Filter>resources\shaders\vertex</Filter>
+    </None>
+    <None Include="..\resources\shaders\fragment\FragmentShader.glsl">
+      <Filter>resources\shaders\fragment</Filter>
     </None>
   </ItemGroup>
 </Project>

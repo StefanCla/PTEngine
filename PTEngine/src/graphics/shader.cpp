@@ -59,7 +59,7 @@ namespace PT
 		break;
 		default:
 		{
-			//Log error
+			printf("SHADER ERROR: Unknown shader type has been specified. Unable to load in shader.\n");
 			return false;
 		}
 		break;
@@ -78,7 +78,7 @@ namespace PT
 		}
 		catch (std::ifstream::failure e)
 		{
-			std::cout << "Error" << std::endl;
+			printf("SHADER ERROR: Unable to open file %s\n", FileName.c_str());
 			return false;
 		}
 
@@ -96,7 +96,7 @@ namespace PT
 		if (!Success)
 		{
 			glGetShaderInfoLog(ShaderID, 512, NULL, infoLog);
-			//Log error
+			printf("SHADER ERROR: Failed to compile shader %s, report: %s\n", FileName.c_str(), infoLog);
 			return false;
 		}
 
@@ -112,7 +112,7 @@ namespace PT
 		if (!Success)
 		{
 			glGetProgramInfoLog(m_ShaderProgramID, 512, NULL, infoLog);
-			//Log error
+			printf("SHADER ERROR: Failed to link shader program, report: %s\n", infoLog);
 			return false;
 		}
 

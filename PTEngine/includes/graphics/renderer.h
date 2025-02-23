@@ -25,7 +25,7 @@ namespace PT
 		void BindVAO();
 		void UnbindVAO();
 
-		void SetupTexture();
+		void SetupTexture(const std::string& FileName, bool bHasAlpha = false, bool bFlipImage = false);
 
 	public:
 		uint32_t m_ShaderProgramID;
@@ -53,6 +53,8 @@ namespace PT
 		uint32_t m_VBO;
 		uint32_t m_VAO;
 		uint32_t m_EBO;
+
+		std::vector<uint32_t> m_TextureID;
 	};
 
 };

@@ -29,7 +29,7 @@ namespace PT
 	{
 		if (!SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO))
 		{
-			printf("Init Err: %s\n", SDL_GetError());
+			printf("RENDERER ERROR: %s\n", SDL_GetError());
 			return false;
 		}
 
@@ -41,7 +41,7 @@ namespace PT
 
 		if (!m_Window)
 		{
-			printf("Window Err: %s\n", SDL_GetError());
+			printf("RENDERER ERROR: %s\n", SDL_GetError());
 			return false;
 		}
 
@@ -49,7 +49,7 @@ namespace PT
 
 		if (!m_GLContext)
 		{
-			printf("Context Err: %s\n", SDL_GetError());
+			printf("RENDERER ERROR: %s\n", SDL_GetError());
 			return false;
 		}
 
@@ -136,62 +136,38 @@ namespace PT
 		glBindBuffer(GL_VERTEX_ARRAY, 0);
 	}
 
-	void Renderer::SetupTexture()
+	void Renderer::SetupTexture(const std::string& FileName, bool bHasAlpha, bool bFlipImage)
 	{
-		uint32_t Texture;
-		glGenTextures(1, &Texture);
+		uint32_t TextureID;
+		glGenTextures(1, &TextureID);
+		m_TextureID.push_back(TextureID);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, Texture);
+		glActiveTexture(GL_TEXTURE0 + (m_TextureID.size() - 1));
+		glBindTexture(GL_TEXTURE_2D, TextureID);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		int Width, Height, NrChannels;
-		unsigned char* ImageData = stbi_load("../resources/textures/wall.jpg", &Width, &Height, &NrChannels, 0);
+		stbi_set_flip_vertically_on_load(bFlipImage);
+
+		const std::string TexturePath = "../resources/textures/";
+		int Width, Height, ChannelCount;
+		unsigned char* ImageData = stbi_load((TexturePath + FileName).c_str(), &Width, &Height, &ChannelCount, 0);
+
 		if (ImageData)
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Width, Height, 0, GL_RGB, GL_UNSIGNED_BYTE, ImageData);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Width, Height, 0, bHasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, ImageData);
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 		else
 		{
-			//Log error
+			printf("TEXTURE ERROR: Loading in %s was unsuccessful, texture was not loaded in.\n", FileName.c_str());
 		}
 
 		stbi_image_free(ImageData);
-		
-
-
-		uint32_t Texture1;
-		glGenTextures(1, &Texture1);
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, Texture1);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_set_flip_vertically_on_load(true);
-		unsigned char* ImageData2 = stbi_load("../resources/textures/awesomeface.png", &Width, &Height, &NrChannels, 0);
-		if (ImageData2)
-		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Width, Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ImageData2);
-			glGenerateMipmap(GL_TEXTURE_2D);
-		}
-		else
-		{
-			//Log error
-		}
-
-		stbi_image_free(ImageData2);
-
 	}
 
 };

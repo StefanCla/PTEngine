@@ -25,7 +25,8 @@ int main()
 			Renderer->SetupVAO();
 			Renderer->SetupVBO();
 			Renderer->SetupEBO();
-			Renderer->SetupTexture();
+			Renderer->SetupTexture("wall.jpg");
+			Renderer->SetupTexture("awesomeface.png", true, true);
 			Renderer->SetupVertexAttrib();
 			Renderer->UnbindVAO();
 
@@ -40,7 +41,7 @@ int main()
 				SDL_Event event;
 				while (SDL_PollEvent(&event))
 				{
-					if (event.type == SDL_EVENT_QUIT)
+					if (event.type == SDL_EVENT_QUIT || (event.key.key == SDLK_ESCAPE && event.key.down))
 					{
 						bIsRunning = false;
 					}

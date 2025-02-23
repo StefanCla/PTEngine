@@ -1,4 +1,5 @@
-#include <cstdio>
+#include "precomp.h"
+
 #include <SDL3/SDL.h>
 #include "slikenet/MessageIdentifiers.h"
 #include "slikenet/peerinterface.h"
@@ -10,26 +11,24 @@
 
 int main()
 {
-	Renderer* Render = new(Renderer);
-	Shader* Shade = new(Shader);
+	PT::Renderer* Renderer = new(PT::Renderer);
+	PT::Shader* Shader = new(PT::Shader);
 
-	if (Render)
+	if (Renderer)
 	{
-		if (Render->SetupWindow(640, 480))
+		if (Renderer->SetupWindow(640, 480))
 		{
-			Shade->LoadShader("VertexShader.glsl", EShaderType::Vertex);
-			Shade->LoadShader("FragmentShader.glsl", EShaderType::Fragment);
-			Shade->Use();
-			//uint32_t Color = glGetUniformLocation(Shade->GetShaderProgram(), "ourColor");
-			//glUniform4f(Color, 1.0, 0.0, 1.0, 0.0);
+			Shader->LoadShader("shader.vert", PT::EShaderType::Vertex);
+			Shader->LoadShader("shader.frag", PT::EShaderType::Fragment);
+			Shader->Use();
 
-			Render->SetupVAO();
-			Render->SetupVBO();
-			//Render->SetupEBO();
-			Render->SetupVertexAttrib();
-			Render->UnbindVAO();
+			Renderer->SetupVAO();
+			Renderer->SetupVBO();
+			Renderer->SetupEBO();
+			Renderer->SetupVertexAttrib();
+			Renderer->UnbindVAO();
 
-			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	//Set wireframe
 
 			bool bIsRunning = true;
 			while (bIsRunning)
@@ -44,26 +43,25 @@ int main()
 
 					if (event.type == SDL_EVENT_WINDOW_RESIZED)
 					{
-						Render->ResizeWindow(event.window.data1, event.window.data2);
+						Renderer->ResizeWindow(event.window.data1, event.window.data2);
 					}
 				}
 
-				glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-				glClear(GL_COLOR_BUFFER_BIT);
+				Shader->Use();
+				Renderer->BindVAO();
+				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+				Renderer->UnbindVAO();
 
-				Shade->Use();
-				Render->BindVAO();
-				//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-				glDrawArrays(GL_TRIANGLES, 0, 3);
-				Render->UnbindVAO();
-
-				Render->SwapWindow();
+				Renderer->SwapWindow();
 			}
 		}
 	}
 
-	delete Render;
-	Render = nullptr;
+	delete Renderer;
+	Renderer = nullptr;
+
+	delete Shader;
+	Shader = nullptr;
 
 	return 0;
 }

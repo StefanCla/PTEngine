@@ -1,65 +1,56 @@
 #pragma once
-#include <stdint.h>
-#include <string>
 #include <glad/glad.h>
 #include <SDL3/SDL.h>
 #include <gl/GL.h>
 
-//Add file loading for shaders using fstream (ifstream)
-
-class Renderer
+namespace PT
 {
-public:
-	Renderer();
-	~Renderer();
 
-	bool SetupWindow(int32_t Width, int32_t Height);
-	void ResizeWindow(int32_t Width, int32_t Height);
-	void SwapWindow();
+	class Renderer
+	{
+	public:
+		Renderer();
+		~Renderer();
 
-	void SetupVBO(); //Vertex Buffer Object
-	void SetupVAO(); //Vertex Array Object
-	void SetupEBO(); //Element Buffer Object
+		bool SetupWindow(int32_t Width, int32_t Height);
+		void ResizeWindow(int32_t Width, int32_t Height);
+		void SwapWindow();
 
-	void SetupVertexAttrib();
+		void SetupVBO(); //Vertex Buffer Object
+		void SetupVAO(); //Vertex Array Object
+		void SetupEBO(); //Element Buffer Object
 
-	void BindVAO();
-	void UnbindVAO();
+		void SetupVertexAttrib();
 
-	void SetupVertexShader();
-	void SetupFragmentShader();
-	void SetupShaderProgram();
+		void BindVAO();
+		void UnbindVAO();
 
-public:
-	uint32_t m_ShaderProgramID;
+	public:
+		uint32_t m_ShaderProgramID;
 
-private:
-	SDL_Window* m_Window = nullptr;
-	SDL_Renderer* m_Renderer = nullptr;
-	SDL_GLContextState* m_GLContext = nullptr;
+	private:
+		SDL_Window* m_Window = nullptr;
+		SDL_Renderer* m_Renderer = nullptr;
+		SDL_GLContextState* m_GLContext = nullptr;
 
-	const float m_Vertices[18] = {
-		// positions         // colors
-		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
-		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
-		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
+		const float m_Vertices[24] = {
+			// positions         // colors
+			 0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // top right
+			 0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom right
+			-0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,   // bottom left
+			-0.5f,  0.5f, 0.0f,  0.0f, 1.0f, 0.0f    // top left 
+		};
+
+		const uint32_t m_Indices[6] = {
+			0, 1, 3,   // first triangle
+			1, 2, 3    // second triangle
+		};
+
+		uint32_t m_VertexShaderID;
+		uint32_t m_FragmentShaderID;
+		uint32_t m_VBO;
+		uint32_t m_VAO;
+		uint32_t m_EBO;
 	};
 
-	//const float m_Vertices[12] = {
-	//	 0.5f,  0.5f, 0.0f,  // top right
-	//	 0.5f, -0.5f, 0.0f,  // bottom right
-	//	-0.5f, -0.5f, 0.0f,  // bottom left
-	//	-0.5f,  0.5f, 0.0f   // top left 
-	//};
-
-	const uint32_t m_Indices[6] = { 
-		0, 1, 3,   // first triangle
-		1, 2, 3    // second triangle
-	};
-	
-	uint32_t m_VertexShaderID;
-	uint32_t m_FragmentShaderID;
-	uint32_t m_VBO;
-	uint32_t m_VAO;
-	uint32_t m_EBO;
 };

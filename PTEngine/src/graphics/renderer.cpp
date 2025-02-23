@@ -1,24 +1,28 @@
-#include "graphics/renderer.h"
-#include <stdio.h>
+#include "precomp.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
-Renderer::Renderer()
-{}
+#include "graphics/renderer.h"
 
-Renderer::~Renderer()
+namespace PT
 {
+
+	Renderer::Renderer()
+	{}
+
+	Renderer::~Renderer()
+	{
 	glDeleteVertexArrays(1, &m_VAO);
 	glDeleteBuffers(1, &m_VBO);
 	glDeleteBuffers(1, &m_EBO);
 	glDeleteShader(m_ShaderProgramID);
 
 	SDL_GL_DestroyContext(m_GLContext);
-}
+	}
 
-bool Renderer::SetupWindow(int32_t Width, int32_t Height)
-{
+	bool Renderer::SetupWindow(int32_t Width, int32_t Height)
+	{
 	if (!SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO))
 	{
 		printf("Init Err: %s\n", SDL_GetError());
@@ -38,7 +42,7 @@ bool Renderer::SetupWindow(int32_t Width, int32_t Height)
 	}
 
 	m_GLContext = SDL_GL_CreateContext(m_Window);
-	
+
 	if (!m_GLContext)
 	{
 		printf("Context Err: %s\n", SDL_GetError());
@@ -65,116 +69,57 @@ bool Renderer::SetupWindow(int32_t Width, int32_t Height)
 	}
 
 	return true;
-}
+	}
 
-void Renderer::SwapWindow()
-{
-	/*glClear*/
-
+	void Renderer::SwapWindow()
+	{
 	SDL_GL_SwapWindow(m_Window);
-}
 
-void Renderer::ResizeWindow(int32_t Width, int32_t Height)
-{
+	//Set greenish background after swap
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	}
+
+	void Renderer::ResizeWindow(int32_t Width, int32_t Height)
+	{
 	glViewport(0, 0, Width, Height);
-}
+	}
 
-void Renderer::SetupVBO()
-{
+	void Renderer::SetupVBO()
+	{
 	glGenBuffers(1, &m_VBO);
 
 	//GL_ARRAY_BUFFER = Vertex buffer
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(m_Vertices), m_Vertices, GL_STATIC_DRAW);
-}
+	}
 
-void Renderer::SetupVAO()
-{
+	void Renderer::SetupVAO()
+	{
 	glGenVertexArrays(1, &m_VAO);
 	BindVAO();
-}
+	}
 
-void Renderer::SetupEBO()
-{
+	void Renderer::SetupEBO()
+	{
 	glGenBuffers(1, &m_EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_Indices), m_Indices, GL_STATIC_DRAW);
-}
+	}
 
-//void Renderer::SetupVertexShader()
-//{
-//	m_VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-//
-//	//Add shader source
-//	glShaderSource(m_VertexShaderID, 1, &m_VertexShader, NULL);
-//
-//	//Dynamically compile shader
-//	glCompileShader(m_VertexShaderID);
-//
-//	int32_t CompileSuccess;
-//	char Log[512];
-//	glGetShaderiv(m_VertexShaderID, GL_COMPILE_STATUS, &CompileSuccess);
-//
-//	if (!CompileSuccess)
-//	{
-//		glGetShaderInfoLog(m_VertexShaderID, 512, NULL, Log);
-//		printf(Log);
-//	}
-//
-//	//https://learnopengl.com/Getting-started/Hello-Triangle
-//}
-//
-//void Renderer::SetupFragmentShader()
-//{
-//	m_FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-//	glShaderSource(m_FragmentShaderID, 1, &m_FragmentShader, NULL);
-//	glCompileShader(m_FragmentShaderID);
-//
-//	int32_t CompileSuccess;
-//	char Log[512];
-//	glGetShaderiv(m_FragmentShaderID, GL_COMPILE_STATUS, &CompileSuccess);
-//
-//	if (!CompileSuccess)
-//	{
-//		glGetShaderInfoLog(m_FragmentShaderID, 512, NULL, Log);
-//		printf(Log);
-//	}
-//}
-
-//void Renderer::SetupShaderProgram()
-//{
-//	m_ShaderProgramID = glCreateProgram();
-//
-//	glAttachShader(m_ShaderProgramID, m_VertexShaderID);
-//	glAttachShader(m_ShaderProgramID, m_FragmentShaderID);
-//	glLinkProgram(m_ShaderProgramID);
-//
-//	int32_t LinkSuccess;
-//	char Log[512];
-//	glGetProgramiv(m_ShaderProgramID, GL_LINK_STATUS, &LinkSuccess);
-//	if (!LinkSuccess)
-//	{
-//		glGetProgramInfoLog(m_ShaderProgramID, 512, NULL, Log);
-//		printf(Log);
-//	}
-//
-//	glDeleteShader(m_VertexShaderID);
-//	glDeleteShader(m_FragmentShaderID);
-//}
-
-void Renderer::BindVAO()
-{
+	void Renderer::BindVAO()
+	{
 	glBindVertexArray(m_VAO);
-}
+	}
 
-void Renderer::UnbindVAO()
-{
+	void Renderer::UnbindVAO()
+	{
 	glBindVertexArray(0);
-}
+	}
 
-void Renderer::SetupVertexAttrib()
-{
+	void Renderer::SetupVertexAttrib()
+	{
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
@@ -182,5 +127,6 @@ void Renderer::SetupVertexAttrib()
 	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_VERTEX_ARRAY, 0);
+	}
 
-}
+};

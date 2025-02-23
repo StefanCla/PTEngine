@@ -58,12 +58,15 @@
     <ClInclude Include="includes\graphics\shader.h">
       <Filter>include\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="includes\precomp.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\resources\shaders\vertex\VertexShader.glsl">
+    <None Include="..\resources\shaders\vertex\shader.vert">
       <Filter>resources\shaders\vertex</Filter>
     </None>
-    <None Include="..\resources\shaders\fragment\FragmentShader.glsl">
+    <None Include="..\resources\shaders\fragment\shader.frag">
       <Filter>resources\shaders\fragment</Filter>
     </None>
   </ItemGroup>

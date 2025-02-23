@@ -114,7 +114,6 @@
   <ItemGroup>
     <ClInclude Include="includes\graphics\renderer.h" />
     <ClInclude Include="includes\graphics\shader.h" />
-    <ClInclude Include="includes\Header.h" />
     <ClInclude Include="includes\precomp.h" />
   </ItemGroup>
   <ItemGroup>

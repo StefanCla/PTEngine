@@ -25,6 +25,8 @@ namespace PT
 		void BindVAO();
 		void UnbindVAO();
 
+		void SetupTexture();
+
 	public:
 		uint32_t m_ShaderProgramID;
 
@@ -33,12 +35,12 @@ namespace PT
 		SDL_Renderer* m_Renderer = nullptr;
 		SDL_GLContextState* m_GLContext = nullptr;
 
-		const float m_Vertices[24] = {
-			// positions         // colors
-			 0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // top right
-			 0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom right
-			-0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,   // bottom left
-			-0.5f,  0.5f, 0.0f,  0.0f, 1.0f, 0.0f    // top left 
+		const float m_Vertices[32] = {
+			// positions         // colors			//texture coords
+			 0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f,   // top right
+			 0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,   // bottom right
+			-0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,   // bottom left
+			-0.5f,  0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f    // top left 
 		};
 
 		const uint32_t m_Indices[6] = {

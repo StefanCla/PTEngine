@@ -49,9 +49,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="includes\Header.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="includes\graphics\renderer.h">
       <Filter>include\graphics</Filter>
     </ClInclude>

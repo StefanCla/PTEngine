@@ -25,8 +25,12 @@ int main()
 			Renderer->SetupVAO();
 			Renderer->SetupVBO();
 			Renderer->SetupEBO();
+			Renderer->SetupTexture();
 			Renderer->SetupVertexAttrib();
 			Renderer->UnbindVAO();
+
+			Shader->SetUniformInt("Texture0", 0);
+			Shader->SetUniformInt("Texture1", 1);
 
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	//Set wireframe
 

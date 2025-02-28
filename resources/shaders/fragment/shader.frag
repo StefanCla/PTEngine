@@ -2,10 +2,10 @@
 
 out vec4 FragColor;
 
-in vec4 ourColor;
+//in vec4 ourColor;
 in vec2 TexCoords;
 
-uniform sampler2D Texture0;
+uniform sampler2D Texture0;	
 uniform sampler2D Texture1;
 
 void main()

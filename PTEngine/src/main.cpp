@@ -5,6 +5,10 @@
 #include "slikenet/peerinterface.h"
 #include "slikenet/Gets.h"
 #include "slikenet/Kbhit.h"
+	
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 #include "graphics/renderer.h"
 #include "graphics/shader.h"
@@ -24,7 +28,7 @@ int main()
 
 			Renderer->SetupVAO();
 			Renderer->SetupVBO();
-			Renderer->SetupEBO();
+			//Renderer->SetupEBO();
 			Renderer->SetupTexture("wall.jpg");
 			Renderer->SetupTexture("awesomeface.png", true, true);
 			Renderer->SetupVertexAttrib();
@@ -32,6 +36,30 @@ int main()
 
 			Shader->SetUniformInt("Texture0", 0);
 			Shader->SetUniformInt("Texture1", 1);
+
+			glm::mat4 Transform = glm::mat4(1.0f);
+			Transform = glm::translate(Transform, glm::vec3(0.5f, -0.5f, 0.0f));
+			Transform = glm::rotate(Transform, glm::radians(90.0f), glm::vec3(0, 0, 1.0f));
+			Transform = glm::scale(Transform, glm::vec3(0.5f, 0.5f, 0.5f));
+
+			uint32_t TransformID = glGetUniformLocation(Shader->GetShaderProgram(), "Transform");
+
+			uint32_t ModelID = glGetUniformLocation(Shader->GetShaderProgram(), "Model");
+			glm::mat4 Model = glm::mat4(1.0f);
+			Model = glm::rotate(Model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));	
+			glUniformMatrix4fv(ModelID, 1, GL_FALSE, glm::value_ptr(Model));
+
+			uint32_t ViewID = glGetUniformLocation(Shader->GetShaderProgram(), "View");
+			glm::mat4 View = glm::mat4(1.0f);
+			View = glm::translate(View, glm::vec3(0.0f, 0.0f, -3.0f));
+			glUniformMatrix4fv(ViewID, 1, GL_FALSE, glm::value_ptr(View));
+
+			uint32_t ProjectionID = glGetUniformLocation(Shader->GetShaderProgram(), "Projection");
+			glm::mat4 Projection;
+			Projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+			glUniformMatrix4fv(ProjectionID, 1, GL_FALSE, glm::value_ptr(Projection));
+
+
 
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	//Set wireframe
 
@@ -54,7 +82,8 @@ int main()
 
 				Shader->Use();
 				Renderer->BindVAO();
-				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+				//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+				glDrawArrays(GL_TRIANGLES, 0, 36);
 				Renderer->UnbindVAO();
 
 				Renderer->SwapWindow();

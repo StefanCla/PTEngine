@@ -1,9 +1,9 @@
-#include "precomp.h"
+#include "precomp.hpp"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
-#include "graphics/shader.h"
+#include "graphics/shader.hpp"
 
 namespace PT
 {

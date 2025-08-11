@@ -47,16 +47,22 @@
     <ClCompile Include="src\graphics\shader.cpp">
       <Filter>src\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\camera.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="includes\graphics\renderer.h">
+    <ClInclude Include="includes\graphics\renderer.hpp">
       <Filter>include\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="includes\graphics\shader.h">
+    <ClInclude Include="includes\graphics\shader.hpp">
       <Filter>include\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="includes\precomp.h">
+    <ClInclude Include="includes\precomp.hpp">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\graphics\camera.hpp">
+      <Filter>include\graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

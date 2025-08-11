@@ -1,4 +1,4 @@
-#include "precomp.h"
+#include "precomp.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -7,7 +7,7 @@
 #include <sstream>
 #include <iostream>
 
-#include "graphics/renderer.h"
+#include "graphics/renderer.hpp"
 
 namespace PT
 {
@@ -45,6 +45,8 @@ namespace PT
 			return false;
 		}
 
+		SDL_SetWindowRelativeMouseMode(m_Window, true);
+
 		m_GLContext = SDL_GL_CreateContext(m_Window);
 
 		if (!m_GLContext)
@@ -72,6 +74,7 @@ namespace PT
 			return false;
 		}
 
+		ResizeWindow(Width, Height);
 		glEnable(GL_DEPTH_TEST);
 
 		return true;

@@ -41,13 +41,8 @@ namespace PT
 
 	void Camera::UpdateCameraDirection(const SDL_MouseMotionEvent& MotionEvent, float DeltaTime)
 	{
-		float OffsetX = MotionEvent.x - m_LastMouseX;
-		float OffsetY = m_LastMouseY - MotionEvent.y;
-		m_LastMouseX = MotionEvent.x;
-		m_LastMouseY = MotionEvent.y;
-
-		OffsetX *= (m_MouseSensitivity * DeltaTime);
-		OffsetY *= (m_MouseSensitivity * DeltaTime);
+		float OffsetX = static_cast<float>(MotionEvent.xrel) * m_MouseSensitivity;
+		float OffsetY = (static_cast<float>(MotionEvent.yrel) * m_MouseSensitivity) * -1.0f;
 
 		m_Yaw += OffsetX;
 		m_Pitch += OffsetY;
@@ -62,7 +57,7 @@ namespace PT
 		CameraDir.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
 		CameraDir.y = sin(glm::radians(m_Pitch));
 		CameraDir.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
-		m_CameraFrontDir = CameraDir;
+		m_CameraFrontDir = glm::normalize(CameraDir);
 	}
 
 	const glm::mat4& Camera::CalculateViewMatrix()

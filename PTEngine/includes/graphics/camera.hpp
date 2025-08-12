@@ -27,12 +27,9 @@ namespace PT
 		glm::mat4 m_ViewMatrix = glm::mat4(1.0f);
 
 		float m_Yaw = -90.0f;
-		float m_Pitch = 20.0f;
+		float m_Pitch = 0.0f;
 		float m_CameraSpeed = 20.0f;
-		float m_MouseSensitivity = 20.0f;
-
-		float m_LastMouseX = 400.0f;
-		float m_LastMouseY = 300.0f;
+		float m_MouseSensitivity = 0.1f;
 
 	};
 

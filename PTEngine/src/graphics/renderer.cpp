@@ -7,6 +7,10 @@
 #include <sstream>
 #include <iostream>
 
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_sdl3.h>
+#include <imgui/imgui_impl_opengl3.h>
+
 #include "graphics/renderer.hpp"
 
 namespace PT
@@ -17,6 +21,10 @@ namespace PT
 
 	Renderer::~Renderer()
 	{
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplSDL3_Shutdown();
+		ImGui::DestroyContext();
+
 		glDeleteVertexArrays(1, &m_VAO);
 		glDeleteBuffers(1, &m_VBO);
 		glDeleteBuffers(1, &m_EBO);
@@ -45,7 +53,7 @@ namespace PT
 			return false;
 		}
 
-		SDL_SetWindowRelativeMouseMode(m_Window, true);
+		SetRelativeMouseMode(true);
 
 		m_GLContext = SDL_GL_CreateContext(m_Window);
 
@@ -77,6 +85,8 @@ namespace PT
 		ResizeWindow(Width, Height);
 		glEnable(GL_DEPTH_TEST);
 
+		ImGuiInitialize();
+
 		return true;
 	}
 
@@ -87,6 +97,11 @@ namespace PT
 		//Set greenish background after swap
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	void Renderer::SetRelativeMouseMode(bool bEnabled)
+	{
+		SDL_SetWindowRelativeMouseMode(m_Window, bEnabled);
 	}
 
 	void Renderer::ResizeWindow(int32_t Width, int32_t Height)
@@ -173,6 +188,32 @@ namespace PT
 		}
 
 		stbi_image_free(ImageData);
+	}
+
+	void Renderer::ImGuiInitialize()
+	{
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO();
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+		ImGui_ImplSDL3_InitForOpenGL(m_Window, m_GLContext);
+		ImGui_ImplOpenGL3_Init();
+	}
+
+	void Renderer::ImGuiNewFrame()
+	{
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplSDL3_NewFrame();
+		ImGui::NewFrame();
+	}
+
+	void Renderer::ImGuiEndFrame()
+	{
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
 };

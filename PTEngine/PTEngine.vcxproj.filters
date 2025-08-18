@@ -33,6 +33,9 @@
     <Filter Include="resources\shaders\fragment">
       <UniqueIdentifier>{5425b452-e3b2-4932-ba65-89696c31629d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="extern\src\imgui">
+      <UniqueIdentifier>{8ecb1cb7-9280-4c7e-be6d-049c6f20df96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -49,6 +52,27 @@
     </ClCompile>
     <ClCompile Include="src\graphics\camera.cpp">
       <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\src\imgui\imgui.cpp">
+      <Filter>extern\src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\src\imgui\imgui_demo.cpp">
+      <Filter>extern\src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\src\imgui\imgui_draw.cpp">
+      <Filter>extern\src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\src\imgui\imgui_impl_opengl3.cpp">
+      <Filter>extern\src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\src\imgui\imgui_impl_sdl3.cpp">
+      <Filter>extern\src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\src\imgui\imgui_tables.cpp">
+      <Filter>extern\src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extern\src\imgui\imgui_widgets.cpp">
+      <Filter>extern\src\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

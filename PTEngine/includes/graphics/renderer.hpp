@@ -16,6 +16,8 @@ namespace PT
 		void ResizeWindow(int32_t Width, int32_t Height);
 		void SwapWindow();
 
+        void SetRelativeMouseMode(bool bEnabled);
+
 		void SetupVBO(); //Vertex Buffer Object
 		void SetupVAO(); //Vertex Array Object
 		void SetupEBO(); //Element Buffer Object
@@ -26,6 +28,11 @@ namespace PT
 		void UnbindVAO();
 
 		void SetupTexture(const std::string& FileName, bool bHasAlpha = false, bool bFlipImage = false);
+
+        //ImGui functions
+        void ImGuiInitialize();
+        void ImGuiNewFrame();
+        void ImGuiEndFrame();
 
 	public:
 		uint32_t m_ShaderProgramID;

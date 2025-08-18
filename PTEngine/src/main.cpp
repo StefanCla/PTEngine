@@ -16,6 +16,10 @@
 
 #include <chrono>
 
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_sdl3.h>
+#include <imgui/imgui_impl_opengl3.h>
+
 glm::vec3 cubePositions[] = {
 	glm::vec3(0.0f,  0.0f,  0.0f),
 	glm::vec3(2.0f,  5.0f, -15.0f),
@@ -34,6 +38,18 @@ inline void ChangeKeyState(unsigned char& KeyState, int Key)
 	KeyState = KeyState ^ Key;
 }
 
+void Deinitialize(PT::Renderer* Renderer, PT::Shader* Shader, PT::Camera* Camera)
+{
+	delete Renderer;
+	Renderer = nullptr;
+
+	delete Shader;
+	Shader = nullptr;
+
+	delete Camera;
+	Camera = nullptr;
+}
+
 int main()
 {
 	PT::Renderer* Renderer = new PT::Renderer;
@@ -44,28 +60,14 @@ int main()
 
 	if (!Renderer || !Shader || !Camera)
 	{
-		delete Renderer;
-		Renderer = nullptr;
-
-		delete Shader;
-		Shader = nullptr;
-
-		delete Camera;
-		Camera = nullptr;
+		Deinitialize(Renderer, Shader, Camera);
 
 		return 0;
 	}
 
 	if (!Renderer->SetupWindow(SCREEN_WIDTH, SCREEN_HEIGHT))
 	{
-		delete Renderer;
-		Renderer = nullptr;
-
-		delete Shader;
-		Shader = nullptr;
-
-		delete Camera;
-		Camera = nullptr;
+		Deinitialize(Renderer, Shader, Camera);
 
 		return 0;
 	}
@@ -99,12 +101,19 @@ int main()
 
 	unsigned char KeyState = 0; //W = 0, A = 1, S = 2, D = 3
 
+	bool bIsRelativeMouseMode = true;
+
 	bool bIsRunning = true;
 	while (bIsRunning)
 	{
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
+			if (!bIsRelativeMouseMode)
+			{
+				ImGui_ImplSDL3_ProcessEvent(&event);
+			}
+
 			if (event.type == SDL_EVENT_QUIT || (event.key.key == SDLK_ESCAPE && event.key.down))
 			{
 				bIsRunning = false;
@@ -115,8 +124,18 @@ int main()
 				Renderer->ResizeWindow(event.window.data1, event.window.data2);
 			}
 
+			//Should get a proper input class
 			if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP)
 			{
+				if (event.key.key == SDLK_F1)
+				{
+					if (event.key.down && !event.key.repeat)
+					{
+						bIsRelativeMouseMode = !bIsRelativeMouseMode;
+						Renderer->SetRelativeMouseMode(bIsRelativeMouseMode);
+					}
+				}
+
 				bool bIsKeyStateSet = false;
 
 				if (event.key.key == SDLK_W)
@@ -156,11 +175,14 @@ int main()
 				}
 			}
 
-			if (event.type == SDL_EVENT_MOUSE_MOTION)
+			if (event.type == SDL_EVENT_MOUSE_MOTION && bIsRelativeMouseMode)
 			{
 				Camera->UpdateCameraDirection(event.motion, DeltaTime);
 			}
 		}
+
+		Renderer->ImGuiNewFrame();
+		ImGui::ShowDemoWindow();
 
 		Camera->UpdateCameraPosition(KeyState, DeltaTime);
 
@@ -190,6 +212,7 @@ int main()
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		Renderer->UnbindVAO();
 
+		Renderer->ImGuiEndFrame();
 		Renderer->SwapWindow();
 
 		std::chrono::steady_clock::time_point NewCurrentTime = std::chrono::high_resolution_clock::now();
@@ -197,6 +220,8 @@ int main()
 		DeltaTimeIncr += DeltaTime;
 		CurrentTime = NewCurrentTime;
 	}
+
+	Deinitialize(Renderer, Shader, Camera);
 
 	return 0;
 }

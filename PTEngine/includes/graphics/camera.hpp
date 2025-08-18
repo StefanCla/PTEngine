@@ -10,7 +10,7 @@ namespace PT
 	public:
 		Camera(glm::vec3 StartPosition);
 
-		void UpdateCameraPosition(const SDL_KeyboardEvent& KeyEvent, float DeltaTime);
+		void UpdateCameraPosition(unsigned char KeyState, float DeltaTime);
 		void UpdateCameraDirection(const SDL_MouseMotionEvent& MotionEvent, float DeltaTime);
 		const glm::mat4& CalculateViewMatrix();
 

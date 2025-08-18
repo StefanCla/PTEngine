@@ -29,6 +29,11 @@ glm::vec3 cubePositions[] = {
 	glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
+inline void ChangeKeyState(unsigned char& KeyState, int Key)
+{
+	KeyState = KeyState ^ Key;
+}
+
 int main()
 {
 	PT::Renderer* Renderer = new PT::Renderer;
@@ -92,6 +97,8 @@ int main()
 	float DeltaTime = 0.0f;
 	float DeltaTimeIncr = 0.0f;
 
+	unsigned char KeyState = 0; //W = 0, A = 1, S = 2, D = 3
+
 	bool bIsRunning = true;
 	while (bIsRunning)
 	{
@@ -108,9 +115,45 @@ int main()
 				Renderer->ResizeWindow(event.window.data1, event.window.data2);
 			}
 
-			if (event.type == SDL_EVENT_KEY_DOWN)
+			if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP)
 			{
-				Camera->UpdateCameraPosition(event.key, DeltaTime);
+				bool bIsKeyStateSet = false;
+
+				if (event.key.key == SDLK_W)
+				{
+					bIsKeyStateSet = KeyState & KEY_W;
+					if (event.key.down != bIsKeyStateSet)
+					{
+						ChangeKeyState(KeyState, KEY_W);
+					}
+				}
+
+				if (event.key.key == SDLK_A)
+				{
+					bIsKeyStateSet = KeyState & KEY_A;
+					if (event.key.down != bIsKeyStateSet)
+					{
+						ChangeKeyState(KeyState, KEY_A);
+					}
+				}
+
+				if (event.key.key == SDLK_S)
+				{
+					bIsKeyStateSet = KeyState & KEY_S;
+					if (event.key.down != bIsKeyStateSet)
+					{
+						ChangeKeyState(KeyState, KEY_S);
+					}
+				}
+
+				if (event.key.key == SDLK_D)
+				{
+					bIsKeyStateSet = KeyState & KEY_D;
+					if (event.key.down != bIsKeyStateSet)
+					{
+						ChangeKeyState(KeyState, KEY_D);
+					}
+				}
 			}
 
 			if (event.type == SDL_EVENT_MOUSE_MOTION)
@@ -118,6 +161,8 @@ int main()
 				Camera->UpdateCameraDirection(event.motion, DeltaTime);
 			}
 		}
+
+		Camera->UpdateCameraPosition(KeyState, DeltaTime);
 
 		Shader->Use();
 

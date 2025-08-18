@@ -16,27 +16,19 @@ namespace PT
 		m_CameraUpDir = glm::cross(ReverseCameraDir, m_CameraRightDir);
 	}
 
-	void Camera::UpdateCameraPosition(const SDL_KeyboardEvent& KeyEvent, float DeltaTime)
+	void Camera::UpdateCameraPosition(unsigned char KeyState, float DeltaTime)
 	{
-		if (KeyEvent.key == SDLK_W)
-		{
+		if(KeyState & KEY_W)
 			m_CameraPosition += (m_CameraSpeed * DeltaTime) * m_CameraFrontDir;
-		}
 
-		if (KeyEvent.key == SDLK_A)
-		{
+		if(KeyState & KEY_A)
 			m_CameraPosition -= glm::normalize(glm::cross(m_CameraFrontDir, m_CameraUpDir)) * (m_CameraSpeed * DeltaTime);
-		}
 
-		if (KeyEvent.key == SDLK_S)
-		{
+		if(KeyState & KEY_S)
 			m_CameraPosition -= (m_CameraSpeed * DeltaTime) * m_CameraFrontDir;
-		}
 
-		if (KeyEvent.key == SDLK_D)
-		{
+		if(KeyState & KEY_D)
 			m_CameraPosition += glm::normalize(glm::cross(m_CameraFrontDir, m_CameraUpDir)) * (m_CameraSpeed * DeltaTime);
-		}
 	}
 
 	void Camera::UpdateCameraDirection(const SDL_MouseMotionEvent& MotionEvent, float DeltaTime)

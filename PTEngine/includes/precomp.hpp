@@ -8,3 +8,9 @@
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
+
+//Change to input class later
+#define KEY_W (1 << 0)
+#define KEY_A (1 << 1)
+#define KEY_S (1 << 2)
+#define KEY_D (1 << 3)

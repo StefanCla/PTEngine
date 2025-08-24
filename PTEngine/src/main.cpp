@@ -75,13 +75,16 @@ int main()
 
 	uint32_t CubeVAOId = Renderer->SetupVAO();
 	uint32_t CubeVBOId = Renderer->SetupVBO();
-	//Renderer->SetupTexture("wall.jpg");
-	//Renderer->SetupTexture("awesomeface.png", true, true);
-//Renderer->SetupVertexAttrib();
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+
+	uint32_t TexID = Renderer->SetupTexture("container.png", true);
+	uint32_t SpecID = Renderer->SetupTexture("container_specular.png", true);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 	Renderer->UnbindVAO();
 
 	//Shader->SetUniformInt("Texture0", 0);
@@ -89,8 +92,7 @@ int main()
 
 	uint32_t LightVAOId = Renderer->SetupVAO();
 	Renderer->BindVBO(CubeVBOId);
-//Renderer->SetupVertexAttrib();
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	Renderer->UnbindVAO();
 
@@ -206,9 +208,8 @@ int main()
 		CubeShader.Use();
 		CubeShader.SetUniformVec3("viewPos", Camera->GetCameraPos());
 
-		CubeShader.SetUniformVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
-		CubeShader.SetUniformVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
-		CubeShader.SetUniformVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+		CubeShader.SetUniformInt("material.diffuse", 0);
+		CubeShader.SetUniformInt("material.specular", 1);
 		CubeShader.SetUniformFloat("material.shininess", 32.0f);
 
 		CubeShader.SetUniformVec3("light.position", CubePositions[1]);

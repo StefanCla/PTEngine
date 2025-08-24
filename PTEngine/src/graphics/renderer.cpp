@@ -117,7 +117,7 @@ namespace PT
 		//GL_ARRAY_BUFFER = Vertex buffer
 		BindVBO(PlacedID);
 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(m_VerticesWithNormal), m_VerticesWithNormal, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(m_VerticesWithNormalAndTex), m_VerticesWithNormalAndTex, GL_STATIC_DRAW);
 
 		return PlacedID;
 	}
@@ -176,7 +176,7 @@ namespace PT
 		//glBindBuffer(GL_VERTEX_ARRAY, 0);
 	}
 
-	void Renderer::SetupTexture(const std::string& FileName, bool bHasAlpha, bool bFlipImage)
+	uint32_t Renderer::SetupTexture(const std::string& FileName, bool bHasAlpha, bool bFlipImage)
 	{
 		uint32_t TextureID;
 		glGenTextures(1, &TextureID);
@@ -208,6 +208,8 @@ namespace PT
 		}
 
 		stbi_image_free(ImageData);
+
+		return TextureID;
 	}
 
 	void Renderer::ImGuiInitialize()

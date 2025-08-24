@@ -33,6 +33,11 @@ namespace PT
 	{
 		glUniform1f(glGetUniformLocation(m_ShaderProgramID, Name.c_str()), Value);
 	}
+	
+	void Shader::SetUniformVec3(const std::string& Name, const glm::vec3& Value) const
+	{
+		glUniform3fv(glGetUniformLocation(m_ShaderProgramID, Name.c_str()), 1, &Value[0]);
+	}
 
 	bool Shader::LoadShader(const std::string& FileName, EShaderType ShaderType)
 	{

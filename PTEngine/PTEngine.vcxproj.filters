@@ -90,10 +90,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\resources\shaders\vertex\shader.vert">
+    <None Include="..\resources\shaders\vertex\cube.vert">
       <Filter>resources\shaders\vertex</Filter>
     </None>
-    <None Include="..\resources\shaders\fragment\shader.frag">
+    <None Include="..\resources\shaders\fragment\cube.frag">
+      <Filter>resources\shaders\fragment</Filter>
+    </None>
+    <None Include="..\resources\shaders\vertex\light.vert">
+      <Filter>resources\shaders\vertex</Filter>
+    </None>
+    <None Include="..\resources\shaders\fragment\light.frag">
       <Filter>resources\shaders\fragment</Filter>
     </None>
   </ItemGroup>

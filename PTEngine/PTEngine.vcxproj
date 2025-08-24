@@ -158,8 +158,10 @@
     <ClInclude Include="includes\precomp.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\resources\shaders\fragment\shader.frag" />
-    <None Include="..\resources\shaders\vertex\shader.vert" />
+    <None Include="..\resources\shaders\fragment\light.frag" />
+    <None Include="..\resources\shaders\fragment\cube.frag" />
+    <None Include="..\resources\shaders\vertex\light.vert" />
+    <None Include="..\resources\shaders\vertex\cube.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -18,13 +18,17 @@ namespace PT
 
         void SetRelativeMouseMode(bool bEnabled);
 
-		void SetupVBO(); //Vertex Buffer Object
-		void SetupVAO(); //Vertex Array Object
+
+        uint32_t SetupVBO(); //Vertex Buffer Object
+        uint32_t SetupVAO(); //Vertex Array Object
 		void SetupEBO(); //Element Buffer Object
 
 		void SetupVertexAttrib();
 
-		void BindVAO();
+        void BindVBO(uint32_t& VBOID);
+
+        void BindVAO();
+		void BindVAO(const uint32_t& VAOID);
 		void UnbindVAO();
 
 		void SetupTexture(const std::string& FileName, bool bHasAlpha = false, bool bFlipImage = false);
@@ -42,7 +46,8 @@ namespace PT
 		SDL_Renderer* m_Renderer = nullptr;
 		SDL_GLContextState* m_GLContext = nullptr;
 
-        const float m_Vertices[180] = {
+        //Cube vertices with texture coords
+        const float m_VerticesWithTex[180] = {
             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
              0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
              0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -86,6 +91,51 @@ namespace PT
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
         };
 
+        //Cube vertices without texture coords
+        const float m_Vertices[108] = {
+            -0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f, -0.5f,
+             0.5f,  0.5f, -0.5f,
+             0.5f,  0.5f, -0.5f,
+            -0.5f,  0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+
+            -0.5f, -0.5f,  0.5f,
+             0.5f, -0.5f,  0.5f,
+             0.5f,  0.5f,  0.5f,
+             0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+            -0.5f, -0.5f,  0.5f,
+
+            -0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+
+             0.5f,  0.5f,  0.5f,
+             0.5f,  0.5f, -0.5f,
+             0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f,  0.5f,
+             0.5f,  0.5f,  0.5f,
+
+            -0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f,  0.5f,
+             0.5f, -0.5f,  0.5f,
+            -0.5f, -0.5f,  0.5f,
+            -0.5f, -0.5f, -0.5f,
+
+            -0.5f,  0.5f, -0.5f,
+             0.5f,  0.5f, -0.5f,
+             0.5f,  0.5f,  0.5f,
+             0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f, -0.5f
+        };
+
 		const uint32_t m_Indices[6] = {
 			0, 1, 3,   // first triangle
 			1, 2, 3    // second triangle
@@ -98,6 +148,8 @@ namespace PT
 		uint32_t m_EBO;
 
 		std::vector<uint32_t> m_TextureID;
+        std::vector<uint32_t> m_VAOIDs;
+        std::vector<uint32_t> m_VBOIDs;
 	};
 
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 
 namespace PT
 {
@@ -24,6 +25,7 @@ namespace PT
 		void SetUniformBool(const std::string& Name, bool Value) const;
 		void SetUniformInt(const std::string& Name, int Value) const;
 		void SetUniformFloat(const std::string& Name, float Value) const;
+		void SetUniformVec3(const std::string& Name, const glm::vec3& Value) const;
 
 	private:
 		uint32_t m_ShaderProgramID = 9999;

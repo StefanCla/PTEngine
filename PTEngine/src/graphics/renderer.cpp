@@ -109,20 +109,27 @@ namespace PT
 		glViewport(0, 0, Width, Height);
 	}
 
-	void Renderer::SetupVBO()
+	uint32_t Renderer::SetupVBO()
 	{
-		glGenBuffers(1, &m_VBO);
+		uint32_t& PlacedID = m_VBOIDs.emplace_back();
+		glGenBuffers(1, &PlacedID);
 
 		//GL_ARRAY_BUFFER = Vertex buffer
-		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+		BindVBO(PlacedID);
 
 		glBufferData(GL_ARRAY_BUFFER, sizeof(m_Vertices), m_Vertices, GL_STATIC_DRAW);
+
+		return PlacedID;
 	}
 
-	void Renderer::SetupVAO()
+	uint32_t Renderer::SetupVAO()
 	{
-		glGenVertexArrays(1, &m_VAO);
-		BindVAO();
+		uint32_t& PlacedID = m_VAOIDs.emplace_back();
+
+		glGenVertexArrays(1, &PlacedID);
+		BindVAO(PlacedID);
+
+		return PlacedID;
 	}
 
 	void Renderer::SetupEBO()
@@ -132,9 +139,22 @@ namespace PT
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_Indices), m_Indices, GL_STATIC_DRAW);
 	}
 
+	void Renderer::BindVBO(uint32_t& VBOID)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, VBOID);
+	}
+
 	void Renderer::BindVAO()
 	{
-		glBindVertexArray(m_VAO);
+		if (!m_VAOIDs.empty())
+		{
+			glBindVertexArray(m_VAOIDs[0]);
+		}
+	}
+
+	void Renderer::BindVAO(const uint32_t& VAOID)
+	{
+		glBindVertexArray(VAOID);
 	}
 
 	void Renderer::UnbindVAO()
@@ -144,16 +164,16 @@ namespace PT
 
 	void Renderer::SetupVertexAttrib()
 	{
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
+		//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		//glEnableVertexAttribArray(1);
 
 		//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 		//glEnableVertexAttribArray(2);
 
-		glBindBuffer(GL_VERTEX_ARRAY, 0);
+		//glBindBuffer(GL_VERTEX_ARRAY, 0);
 	}
 
 	void Renderer::SetupTexture(const std::string& FileName, bool bHasAlpha, bool bFlipImage)

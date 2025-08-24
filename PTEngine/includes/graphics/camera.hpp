@@ -30,7 +30,7 @@ namespace PT
 
 		float m_Yaw = -90.0f;
 		float m_Pitch = 0.0f;
-		float m_CameraSpeed = 20.0f;
+		float m_CameraSpeed = 10.0f;
 		float m_MouseSensitivity = 0.1f;
 
 	};

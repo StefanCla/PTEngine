@@ -14,3 +14,5 @@
 #define KEY_A (1 << 1)
 #define KEY_S (1 << 2)
 #define KEY_D (1 << 3)
+#define KEY_E (1 << 4)
+#define KEY_Q (1 << 5)

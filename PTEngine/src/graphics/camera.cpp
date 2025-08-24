@@ -29,6 +29,12 @@ namespace PT
 
 		if(KeyState & KEY_D)
 			m_CameraPosition += glm::normalize(glm::cross(m_CameraFrontDir, m_CameraUpDir)) * (m_CameraSpeed * DeltaTime);
+
+		if (KeyState & KEY_E)
+			m_CameraPosition += m_WorldUp * (m_CameraSpeed * DeltaTime);
+
+		if (KeyState & KEY_Q)
+			m_CameraPosition -= m_WorldUp * (m_CameraSpeed * DeltaTime);
 	}
 
 	void Camera::UpdateCameraDirection(const SDL_MouseMotionEvent& MotionEvent, float DeltaTime)

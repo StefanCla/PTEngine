@@ -176,6 +176,24 @@ int main()
 						ChangeKeyState(KeyState, KEY_D);
 					}
 				}
+
+				if (event.key.key == SDLK_E)
+				{
+					bIsKeyStateSet = KeyState & KEY_E;
+					if (event.key.down != bIsKeyStateSet)
+					{
+						ChangeKeyState(KeyState, KEY_E);
+					}
+				}
+
+				if (event.key.key == SDLK_Q)
+				{
+					bIsKeyStateSet = KeyState & KEY_Q;
+					if (event.key.down != bIsKeyStateSet)
+					{
+						ChangeKeyState(KeyState, KEY_Q);
+					}
+				}
 			}
 
 			if (event.type == SDL_EVENT_MOUSE_MOTION && bIsRelativeMouseMode)

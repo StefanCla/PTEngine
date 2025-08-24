@@ -204,10 +204,17 @@ int main()
 		//Cube setup
 		Renderer->BindVAO(CubeVAOId);
 		CubeShader.Use();
-		CubeShader.SetUniformVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
-		CubeShader.SetUniformVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		CubeShader.SetUniformVec3("lightPos", CubePositions[1]);
 		CubeShader.SetUniformVec3("viewPos", Camera->GetCameraPos());
+
+		CubeShader.SetUniformVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+		CubeShader.SetUniformVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+		CubeShader.SetUniformVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+		CubeShader.SetUniformFloat("material.shininess", 32.0f);
+
+		CubeShader.SetUniformVec3("light.position", CubePositions[1]);
+		CubeShader.SetUniformVec3("light.ambient", glm::vec3(0.2f));
+		CubeShader.SetUniformVec3("light.diffuse", glm::vec3(0.5f));
+		CubeShader.SetUniformVec3("light.specular", glm::vec3(1.0f));
 
 		uint32_t ModelID = glGetUniformLocation(CubeShader.GetShaderProgram(), "Model");
 		glm::mat4 Model = glm::mat4(1.0f);

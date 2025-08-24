@@ -77,7 +77,11 @@ int main()
 	uint32_t CubeVBOId = Renderer->SetupVBO();
 	//Renderer->SetupTexture("wall.jpg");
 	//Renderer->SetupTexture("awesomeface.png", true, true);
-	Renderer->SetupVertexAttrib();
+//Renderer->SetupVertexAttrib();
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 	Renderer->UnbindVAO();
 
 	//Shader->SetUniformInt("Texture0", 0);
@@ -85,7 +89,9 @@ int main()
 
 	uint32_t LightVAOId = Renderer->SetupVAO();
 	Renderer->BindVBO(CubeVBOId);
-	Renderer->SetupVertexAttrib();
+//Renderer->SetupVertexAttrib();
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
 	Renderer->UnbindVAO();
 
 
@@ -200,6 +206,8 @@ int main()
 		CubeShader.Use();
 		CubeShader.SetUniformVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
 		CubeShader.SetUniformVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+		CubeShader.SetUniformVec3("lightPos", CubePositions[1]);
+		CubeShader.SetUniformVec3("viewPos", Camera->GetCameraPos());
 
 		uint32_t ModelID = glGetUniformLocation(CubeShader.GetShaderProgram(), "Model");
 		glm::mat4 Model = glm::mat4(1.0f);

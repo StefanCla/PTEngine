@@ -14,6 +14,8 @@ namespace PT
 		void UpdateCameraDirection(const SDL_MouseMotionEvent& MotionEvent, float DeltaTime);
 		const glm::mat4& CalculateViewMatrix();
 
+		const glm::vec3& GetCameraPos() const { return m_CameraPosition; }
+
 	private:
 		const glm::vec3 m_WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 		const glm::vec3 m_Target = glm::vec3(0.0f);

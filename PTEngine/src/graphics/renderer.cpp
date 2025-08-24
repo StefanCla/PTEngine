@@ -117,7 +117,7 @@ namespace PT
 		//GL_ARRAY_BUFFER = Vertex buffer
 		BindVBO(PlacedID);
 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(m_Vertices), m_Vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(m_VerticesWithNormal), m_VerticesWithNormal, GL_STATIC_DRAW);
 
 		return PlacedID;
 	}
@@ -164,7 +164,7 @@ namespace PT
 
 	void Renderer::SetupVertexAttrib()
 	{
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 
 		//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));

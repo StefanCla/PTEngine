@@ -20,11 +20,20 @@
 #include <imgui/imgui_impl_sdl3.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-glm::vec3 CubePositions[] =
-{
-	glm::vec3(0.0f, 0.0f, 0.0f),
-	glm::vec3(1.2f, 1.0f, 2.0f) //Light source
+glm::vec3 cubePositions[10] = {
+	glm::vec3(0.0f,  0.0f,  0.0f),
+	glm::vec3(2.0f,  5.0f, -15.0f),
+	glm::vec3(-1.5f, -2.2f, -2.5f),
+	glm::vec3(-3.8f, -2.0f, -12.3f),
+	glm::vec3(2.4f, -0.4f, -3.5f),
+	glm::vec3(-1.7f,  3.0f, -7.5f),
+	glm::vec3(1.3f, -2.0f, -2.5f),
+	glm::vec3(1.5f,  2.0f, -2.5f),
+	glm::vec3(1.5f,  0.2f, -1.5f),
+	glm::vec3(-1.3f,  1.0f, -1.5f)
 };
+
+glm::vec3 LightPosition = glm::vec3(1.2f, 1.0f, 2.0f);
 
 inline void ChangeKeyState(unsigned char& KeyState, int Key)
 {
@@ -87,9 +96,6 @@ int main()
 	glEnableVertexAttribArray(2);
 	Renderer->UnbindVAO();
 
-	//Shader->SetUniformInt("Texture0", 0);
-	//Shader->SetUniformInt("Texture1", 1);
-
 	uint32_t LightVAOId = Renderer->SetupVAO();
 	Renderer->BindVBO(CubeVBOId);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -102,7 +108,7 @@ int main()
 	float DeltaTime = 0.0f;
 	float DeltaTimeIncr = 0.0f;
 
-	unsigned char KeyState = 0; //W = 0, A = 1, S = 2, D = 3
+	unsigned char KeyState = 0; //W = 0, A = 1, S = 2, D = 3, E = 4, Q = 5
 
 	bool bIsRelativeMouseMode = true;
 
@@ -230,25 +236,39 @@ int main()
 		CubeShader.SetUniformInt("material.specular", 1);
 		CubeShader.SetUniformFloat("material.shininess", 32.0f);
 
-		CubeShader.SetUniformVec3("light.position", CubePositions[1]);
+		CubeShader.SetUniformVec3("light.position", Camera->GetCameraPos());
+		CubeShader.SetUniformVec3("light.direction", Camera->GetCameraFront());
+		CubeShader.SetUniformFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+		CubeShader.SetUniformFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+
 		CubeShader.SetUniformVec3("light.ambient", glm::vec3(0.2f));
 		CubeShader.SetUniformVec3("light.diffuse", glm::vec3(0.5f));
 		CubeShader.SetUniformVec3("light.specular", glm::vec3(1.0f));
 
-		uint32_t ModelID = glGetUniformLocation(CubeShader.GetShaderProgram(), "Model");
-		glm::mat4 Model = glm::mat4(1.0f);
-		Model = glm::translate(Model, CubePositions[0]);
-		glUniformMatrix4fv(ModelID, 1, GL_FALSE, glm::value_ptr(Model));
+		CubeShader.SetUniformFloat("light.constant", 1.0f);
+		CubeShader.SetUniformFloat("light.linear", 0.09f);
+		CubeShader.SetUniformFloat("light.quadratic", 0.032f);
 
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		for (uint32_t i = 0; i < 10; i++)
+		{
+			uint32_t ModelID = glGetUniformLocation(CubeShader.GetShaderProgram(), "Model");
+			glm::mat4 Model = glm::mat4(1.0f);
+			Model = glm::translate(Model, cubePositions[i]);
+			float angle = 20.0f * i;
+			Model = glm::rotate(Model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			glUniformMatrix4fv(ModelID, 1, GL_FALSE, glm::value_ptr(Model));
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+
 		Renderer->UnbindVAO();
 
 		//Light source setup
 		LightShader.Use();
 
-		ModelID = glGetUniformLocation(LightShader.GetShaderProgram(), "Model");
-		Model = glm::mat4(1.0f);
-		Model = glm::translate(Model, CubePositions[1]);
+		uint32_t ModelID = glGetUniformLocation(LightShader.GetShaderProgram(), "Model");
+		glm::mat4 Model = glm::mat4(1.0f);
+		Model = glm::translate(Model, LightPosition);
 		glUniformMatrix4fv(ModelID, 1, GL_FALSE, glm::value_ptr(Model));
 
 		Renderer->BindVAO(LightVAOId);

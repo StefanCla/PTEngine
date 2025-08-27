@@ -67,10 +67,11 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)extern\libs\$(PlatformName)\$(ConfigurationName)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL3.lib;SLikeNet_LibStatic_Debug_x64.lib;OpenGL32.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL3.lib;SLikeNet_LibStatic_Debug_x64.lib;OpenGL32.lib;winmm.lib;ws2_32.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(SolutionDir)extern\libs\$(PlatformName)\$(ConfigurationName)\SDL3.dll" "$(SolutionDir)bin\$(PlatformName)\$(Configuration)\"</Command>
+      <Command>copy /Y "$(SolutionDir)extern\libs\$(PlatformName)\$(ConfigurationName)\SDL3.dll" "$(SolutionDir)bin\$(PlatformName)\$(Configuration)\"
+copy /Y "$(SolutionDir)extern\libs\$(PlatformName)\$(ConfigurationName)\assimp-vc143-mtd.dll" "$(SolutionDir)bin\$(PlatformName)\$(Configuration)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -93,10 +94,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)extern\libs\$(PlatformName)\$(ConfigurationName)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL3.lib;SLikeNet_LibStatic_Release_x64.lib;OpenGL32.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL3.lib;SLikeNet_LibStatic_Release_x64.lib;OpenGL32.lib;winmm.lib;ws2_32.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(SolutionDir)extern\libs\$(PlatformName)\$(ConfigurationName)\SDL3.dll" "$(SolutionDir)bin\$(PlatformName)\$(Configuration)\"</Command>
+      <Command>copy /Y "$(SolutionDir)extern\libs\$(PlatformName)\$(ConfigurationName)\SDL3.dll" "$(SolutionDir)bin\$(PlatformName)\$(Configuration)\"
+copy /Y "$(SolutionDir)extern\libs\$(PlatformName)\$(ConfigurationName)\assimp-vc143-mt.dll" "$(SolutionDir)bin\$(PlatformName)\$(Configuration)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -136,6 +138,8 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">precomp.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">precomp.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\graphics\mesh.cpp" />
+    <ClCompile Include="src\graphics\model.cpp" />
     <ClCompile Include="src\graphics\renderer.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">precomp.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">precomp.hpp</PrecompiledHeaderFile>
@@ -153,6 +157,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\graphics\camera.hpp" />
+    <ClInclude Include="includes\graphics\mesh.hpp" />
+    <ClInclude Include="includes\graphics\model.hpp" />
     <ClInclude Include="includes\graphics\renderer.hpp" />
     <ClInclude Include="includes\graphics\shader.hpp" />
     <ClInclude Include="includes\precomp.hpp" />
@@ -160,8 +166,10 @@
   <ItemGroup>
     <None Include="..\resources\shaders\fragment\light.frag" />
     <None Include="..\resources\shaders\fragment\cube.frag" />
+    <None Include="..\resources\shaders\fragment\texture.frag" />
     <None Include="..\resources\shaders\vertex\light.vert" />
     <None Include="..\resources\shaders\vertex\cube.vert" />
+    <None Include="..\resources\shaders\vertex\texture.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

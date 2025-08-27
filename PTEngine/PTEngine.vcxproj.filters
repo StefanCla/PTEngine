@@ -74,6 +74,12 @@
     <ClCompile Include="..\extern\src\imgui\imgui_widgets.cpp">
       <Filter>extern\src\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\mesh.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\model.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\graphics\renderer.hpp">
@@ -86,6 +92,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="includes\graphics\camera.hpp">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\graphics\mesh.hpp">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\graphics\model.hpp">
       <Filter>include\graphics</Filter>
     </ClInclude>
   </ItemGroup>
@@ -101,6 +113,12 @@
     </None>
     <None Include="..\resources\shaders\fragment\light.frag">
       <Filter>resources\shaders\fragment</Filter>
+    </None>
+    <None Include="..\resources\shaders\fragment\texture.frag">
+      <Filter>resources\shaders\fragment</Filter>
+    </None>
+    <None Include="..\resources\shaders\vertex\texture.vert">
+      <Filter>resources\shaders\vertex</Filter>
     </None>
   </ItemGroup>
 </Project>

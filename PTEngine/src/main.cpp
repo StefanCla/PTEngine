@@ -13,25 +13,14 @@
 #include "graphics/renderer.hpp"
 #include "graphics/shader.hpp"
 #include "graphics/camera.hpp"
+#include "graphics/model.hpp"
 
 #include <chrono>
+#include <iostream>
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_sdl3.h>
 #include <imgui/imgui_impl_opengl3.h>
-
-glm::vec3 cubePositions[10] = {
-	glm::vec3(0.0f,  0.0f,  0.0f),
-	glm::vec3(2.0f,  5.0f, -15.0f),
-	glm::vec3(-1.5f, -2.2f, -2.5f),
-	glm::vec3(-3.8f, -2.0f, -12.3f),
-	glm::vec3(2.4f, -0.4f, -3.5f),
-	glm::vec3(-1.7f,  3.0f, -7.5f),
-	glm::vec3(1.3f, -2.0f, -2.5f),
-	glm::vec3(1.5f,  2.0f, -2.5f),
-	glm::vec3(1.5f,  0.2f, -1.5f),
-	glm::vec3(-1.3f,  1.0f, -1.5f)
-};
 
 glm::vec3 pointLightPositions[] = {
 	glm::vec3(0.7f,  0.2f,  2.0f),
@@ -81,34 +70,13 @@ int main()
 	CubeShader.LoadShader("cube.vert", PT::EShaderType::Vertex);
 	CubeShader.LoadShader("cube.frag", PT::EShaderType::Fragment);
 
-	PT::Shader LightShader;
-	LightShader.LoadShader("light.vert", PT::EShaderType::Vertex);
-	LightShader.LoadShader("light.frag", PT::EShaderType::Fragment);
+	CubeShader.Use();
 
 	std::vector<PT::Shader*> Shaders;
 	Shaders.push_back(&CubeShader);
-	Shaders.push_back(&LightShader);
 
-	uint32_t CubeVAOId = Renderer->SetupVAO();
-	uint32_t CubeVBOId = Renderer->SetupVBO();
 
-	uint32_t TexID = Renderer->SetupTexture("container.png", true);
-	uint32_t SpecID = Renderer->SetupTexture("container_specular.png", true);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
-	Renderer->UnbindVAO();
-
-	uint32_t LightVAOId = Renderer->SetupVAO();
-	Renderer->BindVBO(CubeVBOId);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	Renderer->UnbindVAO();
-
+	PT::Model model("../resources/model/backpack.obj");
 
 	std::chrono::steady_clock::time_point CurrentTime = std::chrono::high_resolution_clock::now();
 	std::chrono::steady_clock::time_point StartTime = std::chrono::high_resolution_clock::now();
@@ -230,12 +198,18 @@ int main()
 
 			uint32_t ProjectionID = glGetUniformLocation(Shader->GetShaderProgram(), "Projection");
 			glm::mat4 Projection;
-			Projection = glm::perspective(glm::radians(45.0f), static_cast<float>(SCREEN_WIDTH / SCREEN_HEIGHT), 0.1f, 100.0f);
+			Projection = glm::perspective(glm::radians(65.0f), static_cast<float>(SCREEN_WIDTH / SCREEN_HEIGHT), 0.1f, 100.0f);
 			glUniformMatrix4fv(ProjectionID, 1, GL_FALSE, glm::value_ptr(Projection));
 		}
 
-		//Cube setup
-		Renderer->BindVAO(CubeVAOId);
+		CubeShader.Use();
+
+		uint32_t ModelID = glGetUniformLocation(CubeShader.GetShaderProgram(), "Model");
+		glm::mat4 Model = glm::mat4(1.0f);
+		Model = glm::translate(Model, glm::vec3(0.0f, 0.0f, 0.0f));
+		Model = glm::scale(Model, glm::vec3(1.0f, 1.4f, 1.0f));
+		glUniformMatrix4fv(ModelID, 1, GL_FALSE, glm::value_ptr(Model));
+
 		CubeShader.Use();
 		CubeShader.SetUniformInt("material.diffuse", 0);
 		CubeShader.SetUniformInt("material.specular", 1);
@@ -279,47 +253,17 @@ int main()
 		CubeShader.SetUniformFloat("pointLights[3].linear", 0.09f);
 		CubeShader.SetUniformFloat("pointLights[3].quadratic", 0.032f);
 		// spotLight
-		CubeShader.SetUniformVec3("spotLight.position", Camera->GetCameraPos());
-		CubeShader.SetUniformVec3("spotLight.direction",Camera->GetCameraFront());
-		CubeShader.SetUniformVec3("spotLight.ambient", glm::vec3(0.0f, 0.0f, 0.0f));
-		CubeShader.SetUniformVec3("spotLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
-		CubeShader.SetUniformVec3("spotLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-		CubeShader.SetUniformFloat("spotLight.constant", 1.0f);
-		CubeShader.SetUniformFloat("spotLight.linear", 0.09f);
-		CubeShader.SetUniformFloat("spotLight.quadratic", 0.032f);
-		CubeShader.SetUniformFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
-		CubeShader.SetUniformFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+		CubeShader.SetUniformBool("bUseSpotLight", false);
 
-		for (uint32_t i = 0; i < 10; i++)
-		{
-			uint32_t ModelID = glGetUniformLocation(CubeShader.GetShaderProgram(), "Model");
-			glm::mat4 Model = glm::mat4(1.0f);
-			Model = glm::translate(Model, cubePositions[i]);
-			float angle = 20.0f * i;
-			Model = glm::rotate(Model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			glUniformMatrix4fv(ModelID, 1, GL_FALSE, glm::value_ptr(Model));
+		model.Draw(CubeShader);
 
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
+		ModelID = glGetUniformLocation(CubeShader.GetShaderProgram(), "Model");
+		Model = glm::mat4(1.0f);
+		Model = glm::translate(Model, glm::vec3(3.0f, 0.0f, 5.0f));
+		Model = glm::scale(Model, glm::vec3(1.0f, 1.4f, 1.0f));
+		glUniformMatrix4fv(ModelID, 1, GL_FALSE, glm::value_ptr(Model));
 
-		Renderer->UnbindVAO();
-
-		//Light source setup
-		Renderer->BindVAO(LightVAOId);
-		LightShader.Use();
-
-		for (uint32_t i = 0; i < 4; i++)
-		{
-			uint32_t ModelID = glGetUniformLocation(LightShader.GetShaderProgram(), "Model");
-			glm::mat4 Model = glm::mat4(1.0f);
-			Model = glm::translate(Model, pointLightPositions[i]);
-			Model = glm::scale(Model, glm::vec3(0.2f));
-			glUniformMatrix4fv(ModelID, 1, GL_FALSE, glm::value_ptr(Model));
-
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
-
-		Renderer->UnbindVAO();
+		model.Draw(CubeShader);
 
 		Renderer->ImGuiEndFrame();
 		Renderer->SwapWindow();

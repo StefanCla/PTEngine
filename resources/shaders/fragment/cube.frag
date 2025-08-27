@@ -51,6 +51,8 @@ uniform SpotLight spotLight;
 uniform Material material;
 uniform vec3 viewPos;
 
+uniform bool bUseSpotlight;
+
 in vec2 TexCoords;
 in vec3 Normal;
 in vec3 FragPos;
@@ -71,7 +73,10 @@ void main()
 		result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
 	}
 
-	result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
+	if(bUseSpotlight)
+	{
+		result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
+	}
 
 	FragColor = vec4(result, 1.0);
 }

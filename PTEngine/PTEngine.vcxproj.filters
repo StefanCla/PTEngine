@@ -120,5 +120,8 @@
     <None Include="..\resources\shaders\vertex\texture.vert">
       <Filter>resources\shaders\vertex</Filter>
     </None>
+    <None Include="..\resources\shaders\fragment\depth.frag">
+      <Filter>resources\shaders\fragment</Filter>
+    </None>
   </ItemGroup>
 </Project>

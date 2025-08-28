@@ -70,10 +70,15 @@ int main()
 	CubeShader.LoadShader("cube.vert", PT::EShaderType::Vertex);
 	CubeShader.LoadShader("cube.frag", PT::EShaderType::Fragment);
 
+	PT::Shader CubeShader2;
+	CubeShader2.LoadShader("cube.vert", PT::EShaderType::Vertex);
+	CubeShader2.LoadShader("outline.frag", PT::EShaderType::Fragment);
+
 	CubeShader.Use();
 
 	std::vector<PT::Shader*> Shaders;
 	Shaders.push_back(&CubeShader);
+	Shaders.push_back(&CubeShader2);
 
 
 	PT::Model model("../resources/model/backpack.obj");
@@ -86,6 +91,9 @@ int main()
 	unsigned char KeyState = 0; //W = 0, A = 1, S = 2, D = 3, E = 4, Q = 5
 
 	bool bIsRelativeMouseMode = true;
+
+	glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
 	bool bIsRunning = true;
 	while (bIsRunning)
@@ -207,7 +215,7 @@ int main()
 		uint32_t ModelID = glGetUniformLocation(CubeShader.GetShaderProgram(), "Model");
 		glm::mat4 Model = glm::mat4(1.0f);
 		Model = glm::translate(Model, glm::vec3(0.0f, 0.0f, 0.0f));
-		Model = glm::scale(Model, glm::vec3(1.0f, 1.4f, 1.0f));
+		//Model = glm::scale(Model, glm::vec3(1.0f, 1.4f, 1.0f));
 		glUniformMatrix4fv(ModelID, 1, GL_FALSE, glm::value_ptr(Model));
 
 		CubeShader.Use();
@@ -255,15 +263,26 @@ int main()
 		// spotLight
 		CubeShader.SetUniformBool("bUseSpotLight", false);
 
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glStencilMask(0xFF);
 		model.Draw(CubeShader);
 
-		ModelID = glGetUniformLocation(CubeShader.GetShaderProgram(), "Model");
+		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+		glStencilMask(0x00);
+		glDisable(GL_DEPTH_TEST);
+
+		CubeShader2.Use();
+		ModelID = glGetUniformLocation(CubeShader2.GetShaderProgram(), "Model");
 		Model = glm::mat4(1.0f);
-		Model = glm::translate(Model, glm::vec3(3.0f, 0.0f, 5.0f));
-		Model = glm::scale(Model, glm::vec3(1.0f, 1.4f, 1.0f));
+		Model = glm::translate(Model, glm::vec3(0.0f, 0.0f, 0.0f));
+		Model = glm::scale(Model, glm::vec3(1.1f, 1.03f, 1.03f));
 		glUniformMatrix4fv(ModelID, 1, GL_FALSE, glm::value_ptr(Model));
 
-		model.Draw(CubeShader);
+		model.Draw(CubeShader2);
+
+		glStencilMask(0xFF);
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glEnable(GL_DEPTH_TEST);
 
 		Renderer->ImGuiEndFrame();
 		Renderer->SwapWindow();

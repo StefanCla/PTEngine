@@ -167,6 +167,7 @@ copy /Y "$(SolutionDir)extern\libs\$(PlatformName)\$(ConfigurationName)\assimp-v
     <None Include="..\resources\shaders\fragment\depth.frag" />
     <None Include="..\resources\shaders\fragment\light.frag" />
     <None Include="..\resources\shaders\fragment\cube.frag" />
+    <None Include="..\resources\shaders\fragment\outline.frag" />
     <None Include="..\resources\shaders\fragment\texture.frag" />
     <None Include="..\resources\shaders\vertex\light.vert" />
     <None Include="..\resources\shaders\vertex\cube.vert" />

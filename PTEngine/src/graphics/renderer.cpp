@@ -41,6 +41,7 @@ namespace PT
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
 		m_Window = SDL_CreateWindow("PTEngine", Width, Height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
@@ -81,6 +82,7 @@ namespace PT
 
 		ResizeWindow(Width, Height);
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_STENCIL_TEST);
 
 		ImGuiInitialize();
 
@@ -93,7 +95,7 @@ namespace PT
 
 		//Set greenish background after swap
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 
 	void Renderer::SetRelativeMouseMode(bool bEnabled)

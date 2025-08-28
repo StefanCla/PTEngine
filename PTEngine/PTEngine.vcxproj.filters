@@ -123,5 +123,8 @@
     <None Include="..\resources\shaders\fragment\depth.frag">
       <Filter>resources\shaders\fragment</Filter>
     </None>
+    <None Include="..\resources\shaders\fragment\outline.frag">
+      <Filter>resources\shaders\fragment</Filter>
+    </None>
   </ItemGroup>
 </Project>

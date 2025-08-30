@@ -8,6 +8,8 @@
 #include <imgui/imgui_impl_sdl3.h>
 #include <imgui/imgui_impl_opengl3.h>
 
+#include "stb_image.h"
+
 #include "graphics/renderer.hpp"
 
 namespace PT
@@ -175,41 +177,41 @@ namespace PT
 		//glBindBuffer(GL_VERTEX_ARRAY, 0);
 	}
 
-	//uint32_t Renderer::SetupTexture(const std::string& FileName, bool bHasAlpha, bool bFlipImage)
-	//{
-	//	uint32_t TextureID;
-	//	glGenTextures(1, &TextureID);
-	//	m_TextureID.push_back(TextureID);
+	uint32_t Renderer::SetupTexture(const std::string& FileName, bool bHasAlpha, bool bFlipImage)
+	{
+		uint32_t TextureID;
+		glGenTextures(1, &TextureID);
+		m_TextureID.push_back(TextureID);
 
-	//	glActiveTexture(GL_TEXTURE0 + (m_TextureID.size() - 1));
-	//	glBindTexture(GL_TEXTURE_2D, TextureID);
+		glActiveTexture(GL_TEXTURE0 + (m_TextureID.size() - 1));
+		glBindTexture(GL_TEXTURE_2D, TextureID);
 
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	//	stbi_set_flip_vertically_on_load(bFlipImage);
+		stbi_set_flip_vertically_on_load(bFlipImage);
 
-	//	const std::string TexturePath = "../resources/textures/";
-	//	int Width, Height, ChannelCount;
-	//	unsigned char* ImageData = stbi_load((TexturePath + FileName).c_str(), &Width, &Height, &ChannelCount, 0);
+		const std::string TexturePath = "../resources/textures/";
+		int Width, Height, ChannelCount;
+		unsigned char* ImageData = stbi_load((TexturePath + FileName).c_str(), &Width, &Height, &ChannelCount, 0);
 
-	//	if (ImageData)
-	//	{
-	//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Width, Height, 0, bHasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, ImageData);
-	//		glGenerateMipmap(GL_TEXTURE_2D);
-	//	}
-	//	else
-	//	{
-	//		printf("TEXTURE ERROR: Loading in %s was unsuccessful, texture was not loaded in.\n", FileName.c_str());
-	//	}
+		if (ImageData)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Width, Height, 0, bHasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, ImageData);
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+		else
+		{
+			printf("TEXTURE ERROR: Loading in %s was unsuccessful, texture was not loaded in.\n", FileName.c_str());
+		}
 
-	//	stbi_image_free(ImageData);
+		stbi_image_free(ImageData);
 
-	//	return TextureID;
-	//}
+		return TextureID;
+	}
 
 	void Renderer::ImGuiInitialize()
 	{

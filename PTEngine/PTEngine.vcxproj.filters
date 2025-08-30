@@ -102,10 +102,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\resources\shaders\vertex\cube.vert">
+    <None Include="..\resources\shaders\vertex\model.vert">
       <Filter>resources\shaders\vertex</Filter>
     </None>
-    <None Include="..\resources\shaders\fragment\cube.frag">
+    <None Include="..\resources\shaders\fragment\model.frag">
       <Filter>resources\shaders\fragment</Filter>
     </None>
     <None Include="..\resources\shaders\vertex\light.vert">
@@ -124,6 +124,9 @@
       <Filter>resources\shaders\fragment</Filter>
     </None>
     <None Include="..\resources\shaders\fragment\outline.frag">
+      <Filter>resources\shaders\fragment</Filter>
+    </None>
+    <None Include="..\resources\shaders\fragment\transparency.frag">
       <Filter>resources\shaders\fragment</Filter>
     </None>
   </ItemGroup>

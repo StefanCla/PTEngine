@@ -2,25 +2,34 @@
 
 #include <iostream>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "graphics/renderer.hpp" //for stb_image
 
 #include "graphics/model.hpp"
-#include "graphics/shader.hpp"
+#include "graphics/camera.hpp"
+
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+
+#include "stb_image.h"
 
 namespace PT
 {
 
-	Model::Model(const char* Path)
+	Model::Model(const char* Path, PT::Camera* Camera)
+		: m_Camera(Camera)
 	{
+		m_ModelShader.LoadShader("model.vert", PT::EShaderType::Vertex);
+		m_ModelShader.LoadShader("model.frag", PT::EShaderType::Fragment);
 		LoadModel(Path);
 	}
 
-	void Model::Draw(PT::Shader& shader)
+	void Model::Draw()
 	{
+		SetModelShaderUniforms();
+
 		for (uint32_t i = 0; i < m_Meshes.size(); i++)
 		{
-			m_Meshes[i].Draw(shader);
+			m_Meshes[i].Draw(m_ModelShader);
 		}
 	}
 
@@ -193,6 +202,79 @@ namespace PT
 		stbi_image_free(data);
 
 		return textureID;
+	}
+
+	//These values are currently hardcoded on purpose.
+	void Model::SetModelShaderUniforms()
+	{
+		m_ModelShader.Use();
+
+		glm::mat4 View = glm::mat4(1.0f);
+		glm::vec3 CameraPos = glm::vec3(1.0f);
+		if (m_Camera)
+		{
+			View = m_Camera->CalculateViewMatrix();
+			CameraPos = m_Camera->GetCameraPos();
+		}
+
+		uint32_t ViewID = glGetUniformLocation(m_ModelShader.GetShaderProgram(), "View");
+		glUniformMatrix4fv(ViewID, 1, GL_FALSE, glm::value_ptr(View));
+
+		uint32_t ProjectionID = glGetUniformLocation(m_ModelShader.GetShaderProgram(), "Projection");
+		glm::mat4 Projection;
+		Projection = glm::perspective(glm::radians(65.0f), static_cast<float>(SCREEN_WIDTH / SCREEN_HEIGHT), 0.1f, 100.0f);
+		glUniformMatrix4fv(ProjectionID, 1, GL_FALSE, glm::value_ptr(Projection));
+
+		uint32_t ModelID = glGetUniformLocation(m_ModelShader.GetShaderProgram(), "Model");
+		glm::mat4 Model = glm::mat4(1.0f);
+		Model = glm::translate(Model, glm::vec3(0.0f, 0.0f, 0.0f));
+		//Model = glm::scale(Model, glm::vec3(1.0f, 1.4f, 1.0f));
+		glUniformMatrix4fv(ModelID, 1, GL_FALSE, glm::value_ptr(Model));
+
+		//Setup all materials & lighting
+		m_ModelShader.SetUniformInt("material.diffuse", 0);
+		m_ModelShader.SetUniformInt("material.specular", 1);
+		m_ModelShader.SetUniformVec3("viewPos", CameraPos);
+		m_ModelShader.SetUniformFloat("material.shininess", 32.0f);
+
+		m_ModelShader.SetUniformVec3("dirLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+		m_ModelShader.SetUniformVec3("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+		m_ModelShader.SetUniformVec3("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
+		m_ModelShader.SetUniformVec3("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+		// point light 1
+		m_ModelShader.SetUniformVec3("pointLights[0].position", glm::vec3(0.7f, 0.2f, 2.0f));
+		m_ModelShader.SetUniformVec3("pointLights[0].ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+		m_ModelShader.SetUniformVec3("pointLights[0].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+		m_ModelShader.SetUniformVec3("pointLights[0].specular", glm::vec3(1.0f, 1.0f, 1.0f));
+		m_ModelShader.SetUniformFloat("pointLights[0].constant", 1.0f);
+		m_ModelShader.SetUniformFloat("pointLights[0].linear", 0.09f);
+		m_ModelShader.SetUniformFloat("pointLights[0].quadratic", 0.032f);
+		// point light 2
+		m_ModelShader.SetUniformVec3("pointLights[1].position", glm::vec3(2.3f, -3.3f, -4.0f));
+		m_ModelShader.SetUniformVec3("pointLights[1].ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+		m_ModelShader.SetUniformVec3("pointLights[1].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+		m_ModelShader.SetUniformVec3("pointLights[1].specular", glm::vec3(1.0f, 1.0f, 1.0f));
+		m_ModelShader.SetUniformFloat("pointLights[1].constant", 1.0f);
+		m_ModelShader.SetUniformFloat("pointLights[1].linear", 0.09f);
+		m_ModelShader.SetUniformFloat("pointLights[1].quadratic", 0.032f);
+		// point light 3
+		m_ModelShader.SetUniformVec3("pointLights[2].position", glm::vec3(-4.0f, 2.0f, -12.0f));
+		m_ModelShader.SetUniformVec3("pointLights[2].ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+		m_ModelShader.SetUniformVec3("pointLights[2].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+		m_ModelShader.SetUniformVec3("pointLights[2].specular", glm::vec3(1.0f, 1.0f, 1.0f));
+		m_ModelShader.SetUniformFloat("pointLights[2].constant", 1.0f);
+		m_ModelShader.SetUniformFloat("pointLights[2].linear", 0.09f);
+		m_ModelShader.SetUniformFloat("pointLights[2].quadratic", 0.032f);
+		// point light 4
+		m_ModelShader.SetUniformVec3("pointLights[3].position", glm::vec3(0.0f, 0.0f, -3.0f));
+		m_ModelShader.SetUniformVec3("pointLights[3].ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+		m_ModelShader.SetUniformVec3("pointLights[3].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+		m_ModelShader.SetUniformVec3("pointLights[3].specular", glm::vec3(1.0f, 1.0f, 1.0f));
+		m_ModelShader.SetUniformFloat("pointLights[3].constant", 1.0f);
+		m_ModelShader.SetUniformFloat("pointLights[3].linear", 0.09f);
+		m_ModelShader.SetUniformFloat("pointLights[3].quadratic", 0.032f);
+		// spotLight
+		m_ModelShader.SetUniformBool("bUseSpotLight", false);
 	}
 
 };

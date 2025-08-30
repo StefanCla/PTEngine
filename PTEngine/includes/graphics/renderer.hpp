@@ -31,7 +31,7 @@ namespace PT
 		void BindVAO(const uint32_t& VAOID);
 		void UnbindVAO();
 
-		//uint32_t SetupTexture(const std::string& FileName, bool bHasAlpha = false, bool bFlipImage = false);
+		uint32_t SetupTexture(const std::string& FileName, bool bHasAlpha = false, bool bFlipImage = false);
 
         //ImGui functions
         void ImGuiInitialize();

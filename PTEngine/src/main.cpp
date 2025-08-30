@@ -22,12 +22,8 @@
 #include <imgui/imgui_impl_sdl3.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-glm::vec3 pointLightPositions[] = {
-	glm::vec3(0.7f,  0.2f,  2.0f),
-	glm::vec3(2.3f, -3.3f, -4.0f),
-	glm::vec3(-4.0f,  2.0f, -12.0f),
-	glm::vec3(0.0f,  0.0f, -3.0f)
-};
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 glm::vec3 LightPosition = glm::vec3(1.2f, 1.0f, 2.0f);
 
@@ -66,22 +62,9 @@ int main()
 		return 0;
 	}
 
-	PT::Shader CubeShader;
-	CubeShader.LoadShader("cube.vert", PT::EShaderType::Vertex);
-	CubeShader.LoadShader("cube.frag", PT::EShaderType::Fragment);
-
-	PT::Shader CubeShader2;
-	CubeShader2.LoadShader("cube.vert", PT::EShaderType::Vertex);
-	CubeShader2.LoadShader("outline.frag", PT::EShaderType::Fragment);
-
-	CubeShader.Use();
-
 	std::vector<PT::Shader*> Shaders;
-	Shaders.push_back(&CubeShader);
-	Shaders.push_back(&CubeShader2);
 
-
-	PT::Model model("../resources/model/backpack.obj");
+	//PT::Model model("../resources/model/backpack.obj", Camera);
 
 	std::chrono::steady_clock::time_point CurrentTime = std::chrono::high_resolution_clock::now();
 	std::chrono::steady_clock::time_point StartTime = std::chrono::high_resolution_clock::now();
@@ -210,79 +193,7 @@ int main()
 			glUniformMatrix4fv(ProjectionID, 1, GL_FALSE, glm::value_ptr(Projection));
 		}
 
-		CubeShader.Use();
-
-		uint32_t ModelID = glGetUniformLocation(CubeShader.GetShaderProgram(), "Model");
-		glm::mat4 Model = glm::mat4(1.0f);
-		Model = glm::translate(Model, glm::vec3(0.0f, 0.0f, 0.0f));
-		//Model = glm::scale(Model, glm::vec3(1.0f, 1.4f, 1.0f));
-		glUniformMatrix4fv(ModelID, 1, GL_FALSE, glm::value_ptr(Model));
-
-		CubeShader.Use();
-		CubeShader.SetUniformInt("material.diffuse", 0);
-		CubeShader.SetUniformInt("material.specular", 1);
-		CubeShader.SetUniformVec3("viewPos", Camera->GetCameraPos());
-		CubeShader.SetUniformFloat("material.shininess", 32.0f);
-
-		CubeShader.SetUniformVec3("dirLight.direction", glm::vec3(- 0.2f, -1.0f, -0.3f));
-		CubeShader.SetUniformVec3("dirLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
-		CubeShader.SetUniformVec3("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
-		CubeShader.SetUniformVec3("dirLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-		// point light 1
-		CubeShader.SetUniformVec3("pointLights[0].position", pointLightPositions[0]);
-		CubeShader.SetUniformVec3("pointLights[0].ambient", glm::vec3(0.05f, 0.05f, 0.05f));
-		CubeShader.SetUniformVec3("pointLights[0].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
-		CubeShader.SetUniformVec3("pointLights[0].specular", glm::vec3(1.0f, 1.0f, 1.0f));
-		CubeShader.SetUniformFloat("pointLights[0].constant", 1.0f);
-		CubeShader.SetUniformFloat("pointLights[0].linear", 0.09f);
-		CubeShader.SetUniformFloat("pointLights[0].quadratic", 0.032f);
-		// point light 2
-		CubeShader.SetUniformVec3("pointLights[1].position", pointLightPositions[1]);
-		CubeShader.SetUniformVec3("pointLights[1].ambient", glm::vec3(0.05f, 0.05f, 0.05f));
-		CubeShader.SetUniformVec3("pointLights[1].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
-		CubeShader.SetUniformVec3("pointLights[1].specular", glm::vec3(1.0f, 1.0f, 1.0f));
-		CubeShader.SetUniformFloat("pointLights[1].constant", 1.0f);
-		CubeShader.SetUniformFloat("pointLights[1].linear", 0.09f);
-		CubeShader.SetUniformFloat("pointLights[1].quadratic", 0.032f);
-		// point light 3
-		CubeShader.SetUniformVec3("pointLights[2].position", pointLightPositions[2]);
-		CubeShader.SetUniformVec3("pointLights[2].ambient", glm::vec3(0.05f, 0.05f, 0.05f));
-		CubeShader.SetUniformVec3("pointLights[2].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
-		CubeShader.SetUniformVec3("pointLights[2].specular", glm::vec3(1.0f, 1.0f, 1.0f));
-		CubeShader.SetUniformFloat("pointLights[2].constant", 1.0f);
-		CubeShader.SetUniformFloat("pointLights[2].linear", 0.09f);
-		CubeShader.SetUniformFloat("pointLights[2].quadratic", 0.032f);
-		// point light 4
-		CubeShader.SetUniformVec3("pointLights[3].position", pointLightPositions[3]);
-		CubeShader.SetUniformVec3("pointLights[3].ambient", glm::vec3(0.05f, 0.05f, 0.05f));
-		CubeShader.SetUniformVec3("pointLights[3].diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
-		CubeShader.SetUniformVec3("pointLights[3].specular", glm::vec3(1.0f, 1.0f, 1.0f));
-		CubeShader.SetUniformFloat("pointLights[3].constant", 1.0f);
-		CubeShader.SetUniformFloat("pointLights[3].linear", 0.09f);
-		CubeShader.SetUniformFloat("pointLights[3].quadratic", 0.032f);
-		// spotLight
-		CubeShader.SetUniformBool("bUseSpotLight", false);
-
-		glStencilFunc(GL_ALWAYS, 1, 0xFF);
-		glStencilMask(0xFF);
-		model.Draw(CubeShader);
-
-		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-		glStencilMask(0x00);
-		glDisable(GL_DEPTH_TEST);
-
-		CubeShader2.Use();
-		ModelID = glGetUniformLocation(CubeShader2.GetShaderProgram(), "Model");
-		Model = glm::mat4(1.0f);
-		Model = glm::translate(Model, glm::vec3(0.0f, 0.0f, 0.0f));
-		Model = glm::scale(Model, glm::vec3(1.1f, 1.03f, 1.03f));
-		glUniformMatrix4fv(ModelID, 1, GL_FALSE, glm::value_ptr(Model));
-
-		model.Draw(CubeShader2);
-
-		glStencilMask(0xFF);
-		glStencilFunc(GL_ALWAYS, 1, 0xFF);
-		glEnable(GL_DEPTH_TEST);
+		//model.Draw();
 
 		Renderer->ImGuiEndFrame();
 		Renderer->SwapWindow();
